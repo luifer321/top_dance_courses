@@ -1,0 +1,180 @@
+{
+  "metadata": {
+    "title": "Top Dance Academy",
+    "titleTemplate": "%s · Top Dance Academy",
+    "description": "Aprende salsa, bachata, técnica, musicalidad y coreografía con cursos en video de Top Dance Academy."
+  },
+  "common": {
+    "appName": "Top Dance Academy",
+    "loading": "Cargando…",
+    "comingSoon": "Próximamente",
+    "skipToContent": "Saltar al contenido",
+    "redirecting": "Redirigiendo…",
+    "continue": "Continuar",
+    "language": {
+      "label": "Idioma",
+      "change": "Cambiar idioma",
+      "es": "Español",
+      "en": "English"
+    },
+    "contentLanguages": {
+      "available": "Idiomas disponibles",
+      "original": "Idioma original",
+      "audio": "Audio",
+      "subtitles": "Subtítulos",
+      "notAvailableInLocale": "Este contenido aún no está disponible en español."
+    }
+  },
+  "navigation": {
+    "home": "Inicio",
+    "courses": "Cursos",
+    "dashboard": "Mi panel",
+    "profile": "Perfil",
+    "login": "Iniciar sesión",
+    "register": "Crear cuenta",
+    "mainMenu": "Menú principal",
+    "footerRights": "Todos los derechos reservados."
+  },
+  "home": {
+    "eyebrow": "Academia de baile online",
+    "title": "Baila con técnica, musicalidad y confianza",
+    "subtitle": "Cursos en video de salsa, bachata y más, creados por instructores profesionales para que avances a tu ritmo.",
+    "primaryCta": "Explorar cursos",
+    "secondaryCta": "Crear cuenta",
+    "stylesTitle": "Lo que aprenderás",
+    "styles": {
+      "salsa": "Salsa",
+      "bachata": "Bachata",
+      "technique": "Técnica",
+      "musicality": "Musicalidad",
+      "coordination": "Coordinación",
+      "footwork": "Footwork",
+      "choreography": "Coreografía",
+      "competition": "Preparación para competencias"
+    }
+  },
+  "auth": {
+    "loginTitle": "Bienvenido de nuevo",
+    "loginSubtitle": "Inicia sesión para continuar con tus cursos.",
+    "registerTitle": "Crea tu cuenta",
+    "registerSubtitle": "Empieza a aprender con Top Dance Academy.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submitLogin": "Iniciar sesión",
+    "submitRegister": "Crear cuenta",
+    "noAccount": "¿No tienes cuenta?",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "notAvailableYet": "La autenticación todavía no está disponible."
+  },
+  "dashboard": {
+    "title": "Mi panel",
+    "subtitle": "Tu progreso y tus cursos en un solo lugar.",
+    "continueLearning": "Continuar aprendiendo",
+    "emptyProgress": "Cuando empieces un curso, tu progreso aparecerá aquí."
+  },
+  "courses": {
+    "title": "Cursos",
+    "subtitle": "Explora el catálogo de Top Dance Academy.",
+    "emptyCatalog": "El catálogo estará disponible muy pronto.",
+    "detailTitle": "Detalles del curso",
+    "detailPlaceholder": "La información de este curso se cargará desde la API.",
+    "modules": "Módulos",
+    "lessons": "Lecciones",
+    "instructor": "Instructor"
+  },
+  "lessons": {
+    "playerTitle": "Reproductor de lección",
+    "playerPlaceholder": "El reproductor de video se conectará con Bunny Stream.",
+    "previous": "Lección anterior",
+    "next": "Siguiente lección",
+    "markComplete": "Marcar como completada"
+  },
+  "subscriptions": {
+    "title": "Membresía",
+    "subtitle": "Accede a todo el catálogo con una sola membresía.",
+    "subscribe": "Suscribirme",
+    "manage": "Administrar membresía"
+  },
+  "profile": {
+    "title": "Perfil",
+    "subtitle": "Administra tus datos y preferencias.",
+    "preferredLanguage": "Idioma de la interfaz",
+    "preferredLanguageHint": "El idioma de la interfaz es independiente del idioma de cada curso."
+  },
+  "validation": {
+    "required": "Este campo es obligatorio.",
+    "email": "Ingresa un correo electrónico válido.",
+    "minLength": "Debe tener al menos {min} caracteres.",
+    "maxLength": "Debe tener como máximo {max} caracteres."
+  },
+  "errors": {
+    "notFoundTitle": "Página no encontrada",
+    "notFoundDescription": "La página que buscas no existe o fue movida.",
+    "backHome": "Volver al inicio",
+    "generic": "Algo salió mal. Inténtalo de nuevo.",
+    "network": "No se pudo conectar con el servidor."
+  },
+  "designSystem": {
+    "title": "Sistema de diseño",
+    "subtitle": "Referencia interna para desarrollo. No es una página pública.",
+    "palette": "Paleta oficial",
+    "semanticTokens": "Tokens semánticos",
+    "statusColors": "Colores de estado",
+    "typography": "Tipografía",
+    "headingSample": "Baila con propósito",
+    "bodySample": "La musicalidad es la conexión entre el movimiento y la música. Cada curso indica claramente en qué idiomas está disponible.",
+    "buttons": "Botones",
+    "variants": {
+      "default": "Principal",
+      "secondary": "Secundario",
+      "outline": "Contorno",
+      "ghost": "Fantasma",
+      "link": "Enlace",
+      "destructive": "Destructivo",
+      "disabled": "Deshabilitado"
+    },
+    "forms": "Formularios",
+    "emailPlaceholder": "tu@correo.com",
+    "selectPlaceholder": "Elige un estilo",
+    "textareaPlaceholder": "Escribe un comentario…",
+    "cards": "Tarjetas",
+    "cardTitle": "Fundamentos de salsa",
+    "cardDescription": "Curso de ejemplo para mostrar el estilo de tarjeta.",
+    "badges": "Insignias",
+    "badgeLevels": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzado"
+    },
+    "statuses": {
+      "success": "Completado",
+      "warning": "Traducción pendiente",
+      "error": "Error",
+      "info": "Nuevo"
+    },
+    "dialogs": "Diálogos",
+    "openDialog": "Abrir diálogo",
+    "dialogTitle": "Diálogo de ejemplo",
+    "dialogDescription": "Los diálogos usan Radix UI a través de shadcn/ui.",
+    "close": "Cerrar",
+    "navigation": "Navegación",
+    "tabs": {
+      "overview": "Resumen",
+      "lessons": "Lecciones",
+      "resources": "Recursos"
+    },
+    "tabContent": "Contenido de la pestaña seleccionada.",
+    "dropdown": "Menú desplegable",
+    "tooltip": "Información adicional",
+    "table": "Tabla",
+    "tableHeaders": {
+      "lesson": "Lección",
+      "duration": "Duración",
+      "status": "Estado"
+    },
+    "surfaces": "Superficies",
+    "darkSurface": "Superficie oscura (predeterminada)",
+    "lightSurface": "Superficie clara (uso puntual)"
+  }
+}
