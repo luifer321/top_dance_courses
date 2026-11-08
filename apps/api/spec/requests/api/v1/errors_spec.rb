@@ -12,7 +12,9 @@ RSpec.describe "API v1 error handling", type: :request do
     Rails.application.routes.draw do
       namespace :api, defaults: { format: :json } do
         namespace :v1 do
-          get "probe/:action", controller: "probe"
+          %w[not_found forbidden bad_request].each do |action|
+            get "probe/#{action}", to: "probe##{action}"
+          end
         end
       end
     end
