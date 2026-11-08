@@ -1,0 +1,33 @@
+{
+  "name": "@top-dance/api-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Typed Top Dance API client generated from the Rails OpenAPI spec. Runs in browsers and React Native.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "generate": "openapi-typescript ../../apps/api/swagger/v1/openapi.yaml --output src/generated/schema.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.17.0"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.13.0",
+    "typescript": "^5.9.3",
+    "vitest": "5.1.0"
+  }
+}

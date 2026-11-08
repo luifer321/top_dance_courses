@@ -13,7 +13,7 @@
     "typecheck": "turbo run typecheck",
     "dev:web": "turbo run dev --filter=@top-dance/web",
     "dev:api": "turbo run dev --filter=@top-dance/api",
-    "dev:mobile": "pnpm --filter @top-dance/mobile start",
+    "dev:mobile": "turbo run build --filter=@top-dance/api-client && pnpm --filter @top-dance/mobile start",
     "api:generate": "bash infrastructure/scripts/generate-api-client.sh"
   },
   "devDependencies": {
