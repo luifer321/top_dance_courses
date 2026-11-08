@@ -1,0 +1,70 @@
+{
+  "common": {
+    "appName": "Top Dance Academy",
+    "loading": "Loading…",
+    "comingSoon": "Coming soon",
+    "language": {
+      "label": "Language",
+      "change": "Change language",
+      "es": "Español",
+      "en": "English"
+    },
+    "contentLanguages": {
+      "available": "Available languages",
+      "original": "Original language",
+      "audio": "Audio",
+      "subtitles": "Subtitles",
+      "notAvailableInLocale": "This content is not available in English yet."
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "courses": "Courses",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "login": "Log in",
+    "register": "Sign up"
+  },
+  "home": {
+    "eyebrow": "Online dance academy",
+    "title": "Dance with technique, musicality and confidence",
+    "subtitle": "Salsa, bachata and more, taught in video courses by professional instructors so you can progress at your own pace.",
+    "primaryCta": "Browse courses",
+    "stylesTitle": "What you will learn",
+    "styles": {
+      "salsa": "Salsa",
+      "bachata": "Bachata",
+      "technique": "Technique",
+      "musicality": "Musicality",
+      "coordination": "Coordination",
+      "footwork": "Footwork",
+      "choreography": "Choreography",
+      "competition": "Competition preparation"
+    }
+  },
+  "courses": {
+    "title": "Courses",
+    "subtitle": "Explore the Top Dance Academy catalog.",
+    "emptyCatalog": "The catalog will be available very soon."
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Manage your details and preferences.",
+    "preferredLanguage": "Interface language",
+    "preferredLanguageHint": "The interface language is independent of each course's language."
+  },
+  "validation": {
+    "required": "This field is required.",
+    "email": "Enter a valid email address.",
+    "minLength": "Must be at least {min} characters."
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Could not connect to the server."
+  },
+  "mobile": {
+    "deviceLanguage": "Device language",
+    "deviceLanguageHint": "Use the language set on your phone.",
+    "selected": "Selected"
+  }
+}
