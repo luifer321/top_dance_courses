@@ -1,24 +1,28 @@
-# README
+# @top-dance/api
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Rails 8.1 application (full Rails, not API-only) serving:
 
-Things you may want to cover:
+- REST API under `/api/v1` (JSON, localized errors, OpenAPI via rswag)
+- ActiveAdmin at `/admin` (Devise `AdminUser`, Spanish/English)
+- Solid Queue jobs (`bin/jobs`), Solid Cache, Solid Cable
 
-* Ruby version
+```bash
+cp .env.example .env
+bin/rails db:prepare && bin/rails db:seed   # dev admin user
+bin/rails server -p 3001                    # or: pnpm dev:api from the repo root
+bundle exec rspec
+bin/rubocop
+bin/brakeman -q && bin/bundler-audit
+RAILS_ENV=test bin/rails rswag:specs:swaggerize   # regenerate swagger/v1/openapi.yaml
+```
 
-* System dependencies
+## Layout
 
-* Configuration
+- `app/controllers/api/v1` — API controllers (`BaseController`: locale, errors, Pundit)
+- `app/admin` — ActiveAdmin resources
+- `app/policies` — Pundit policies
+- `app/services`, `app/queries`, `app/serializers` — reserved for business logic
+- `spec/requests/api/v1` — rswag specs (they also produce the OpenAPI document)
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+`config/master.key` is not committed. Keep it in a password manager and set
+`RAILS_MASTER_KEY` in production.
