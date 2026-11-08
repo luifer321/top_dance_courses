@@ -1,0 +1,112 @@
+---
+openapi: 3.0.3
+info:
+  title: Top Dance Academy API
+  version: v1
+  description: REST API shared by the Top Dance web and mobile apps.
+servers:
+- url: http://localhost:3001
+  description: Local development
+paths:
+  "/api/v1/health":
+    get:
+      summary: Readiness check
+      tags:
+      - System
+      operationId: getHealth
+      responses:
+        '200':
+          description: application and database are available
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Health"
+  "/api/v1/locales":
+    get:
+      summary: Supported interface languages
+      tags:
+      - System
+      operationId: listLocales
+      parameters:
+      - "$ref": "#/components/parameters/locale"
+      responses:
+        '200':
+          description: supported locales, Spanish first and default
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LocaleList"
+components:
+  parameters:
+    locale:
+      name: locale
+      in: query
+      required: false
+      description: Interface language for messages (overrides Accept-Language).
+      schema:
+        "$ref": "#/components/schemas/LocaleCode"
+  schemas:
+    LocaleCode:
+      type: string
+      enum:
+      - es
+      - en
+    Error:
+      type: object
+      required:
+      - error
+      additionalProperties: false
+      properties:
+        error:
+          type: object
+          required:
+          - code
+          - message
+          additionalProperties: false
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+    Health:
+      type: object
+      required:
+      - status
+      - database
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+          enum:
+          - ok
+          - degraded
+        database:
+          type: string
+          enum:
+          - ok
+          - unavailable
+    Locale:
+      type: object
+      required:
+      - code
+      - name
+      additionalProperties: false
+      properties:
+        code:
+          "$ref": "#/components/schemas/LocaleCode"
+        name:
+          type: string
+          description: Native language name.
+    LocaleList:
+      type: object
+      required:
+      - default_locale
+      - locales
+      additionalProperties: false
+      properties:
+        default_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        locales:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Locale"

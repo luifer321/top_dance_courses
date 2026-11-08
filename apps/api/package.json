@@ -1,0 +1,14 @@
+{
+  "name": "@top-dance/api",
+  "private": true,
+  "description": "Rails backend + ActiveAdmin. Ruby dependencies are managed by Bundler; these scripts only let Turborepo orchestrate it.",
+  "scripts": {
+    "dev": "bin/rails server -p 3001",
+    "jobs": "bin/jobs",
+    "lint": "bin/rubocop",
+    "test": "bundle exec rspec",
+    "security": "bin/brakeman -q --no-pager && bin/bundler-audit",
+    "openapi": "RAILS_ENV=test bin/rails rswag:specs:swaggerize",
+    "db:prepare": "bin/rails db:prepare"
+  }
+}

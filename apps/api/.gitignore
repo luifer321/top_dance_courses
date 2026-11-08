@@ -1,0 +1,32 @@
+# Secrets. Never commit the master key; share it through a password manager
+# and set RAILS_MASTER_KEY in Railway.
+/config/master.key
+/config/credentials/*.key
+.env
+.env.*
+!.env.example
+
+# Bundler
+/.bundle
+/vendor/bundle
+
+# Logs, temp files, uploads
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/
+!/tmp/storage/.keep
+
+# Compiled assets
+/public/assets
+
+# Test artifacts
+/coverage
+/spec/examples.txt
