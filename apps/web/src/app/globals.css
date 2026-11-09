@@ -1,0 +1,231 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* -------------------------------------------------------------------------
+ * Official Top Dance palette. Do not change these values.
+ * ---------------------------------------------------------------------- */
+:root {
+  --purple-darkest: #0f0a1a;
+  --purple-dark: #1a1128;
+  --purple-mid: #2d1b4e;
+  --purple-brand: #6b3fa0;
+  --purple-light: #8b5fcf;
+  --purple-bright: #a87de8;
+  --purple-glow: #c4a1f0;
+
+  --white: #ffffff;
+
+  --gray-100: #f0edf5;
+  --gray-200: #d4cfe0;
+  --gray-300: #a89fba;
+  --gray-400: #7a7190;
+
+  --dark-bg: #0a0612;
+  --dark-card: #15101f;
+  --dark-card-hover: #1e1530;
+}
+
+/* -------------------------------------------------------------------------
+ * Semantic tokens (shadcn/ui). Dark is the default theme.
+ * ---------------------------------------------------------------------- */
+:root {
+  --background: var(--dark-bg);
+  --foreground: var(--gray-100);
+  --card: var(--dark-card);
+  --card-foreground: var(--gray-100);
+  --card-hover: var(--dark-card-hover);
+  --popover: var(--purple-dark);
+  --popover-foreground: var(--gray-100);
+  --primary: var(--purple-brand);
+  --primary-foreground: var(--white);
+  --secondary: var(--purple-mid);
+  --secondary-foreground: var(--gray-100);
+  --muted: var(--purple-dark);
+  --muted-foreground: var(--gray-300);
+  --accent: var(--dark-card-hover);
+  --accent-foreground: var(--purple-glow);
+  --border: color-mix(in oklab, var(--purple-light) 22%, transparent);
+  --input: color-mix(in oklab, var(--purple-light) 30%, transparent);
+  --ring: var(--purple-light);
+
+  /* Semantic status colors, tuned for dark surfaces (AA on --dark-card). */
+  --destructive: #f87171;
+  --destructive-foreground: var(--purple-darkest);
+  --success: #4ade80;
+  --success-foreground: var(--purple-darkest);
+  --warning: #fbbf24;
+  --warning-foreground: var(--purple-darkest);
+  --info: var(--purple-bright);
+  --info-foreground: var(--purple-darkest);
+
+  --chart-1: var(--purple-glow);
+  --chart-2: var(--purple-bright);
+  --chart-3: var(--purple-light);
+  --chart-4: var(--purple-brand);
+  --chart-5: var(--purple-mid);
+
+  --sidebar: var(--purple-darkest);
+  --sidebar-foreground: var(--gray-100);
+  --sidebar-primary: var(--purple-brand);
+  --sidebar-primary-foreground: var(--white);
+  --sidebar-accent: var(--dark-card-hover);
+  --sidebar-accent-foreground: var(--purple-glow);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+
+  --radius: 0.75rem;
+
+  color-scheme: dark;
+}
+
+/* Occasional light surface (e.g. printable certificates, light sections). */
+.surface-light {
+  --background: var(--gray-100);
+  --foreground: var(--purple-dark);
+  --card: var(--white);
+  --card-foreground: var(--purple-dark);
+  --card-hover: var(--gray-100);
+  --popover: var(--white);
+  --popover-foreground: var(--purple-dark);
+  --secondary: var(--gray-200);
+  --secondary-foreground: var(--purple-dark);
+  --muted: var(--gray-200);
+  --muted-foreground: var(--purple-mid);
+  --accent: var(--gray-200);
+  --accent-foreground: var(--purple-brand);
+  --border: color-mix(in oklab, var(--purple-mid) 18%, transparent);
+  --input: color-mix(in oklab, var(--purple-mid) 28%, transparent);
+  --ring: var(--purple-brand);
+  --destructive: #b91c1c;
+  --success: #15803d;
+  --warning: #a16207;
+  --info: var(--purple-brand);
+
+  color-scheme: light;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+@theme inline {
+  /* Only the official palette and semantic tokens are available as colors. */
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-black: #000000;
+  --color-white: var(--white);
+
+  --color-purple-darkest: var(--purple-darkest);
+  --color-purple-dark: var(--purple-dark);
+  --color-purple-mid: var(--purple-mid);
+  --color-purple-brand: var(--purple-brand);
+  --color-purple-light: var(--purple-light);
+  --color-purple-bright: var(--purple-bright);
+  --color-purple-glow: var(--purple-glow);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-dark-bg: var(--dark-bg);
+  --color-dark-card: var(--dark-card);
+  --color-dark-card-hover: var(--dark-card-hover);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-card-hover: var(--card-hover);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-display);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --shadow-glow: 0 0 32px -8px color-mix(in oklab, var(--purple-bright) 55%, transparent);
+  --shadow-glow-sm: 0 0 16px -6px color-mix(in oklab, var(--purple-bright) 50%, transparent);
+}
+
+/* Brand utilities: subtle gradients and restrained glow. */
+@utility bg-brand-gradient {
+  background-image: linear-gradient(135deg, var(--purple-brand) 0%, var(--purple-light) 100%);
+}
+
+@utility bg-surface-gradient {
+  background-image:
+    radial-gradient(60rem 30rem at 15% -10%, color-mix(in oklab, var(--purple-brand) 28%, transparent), transparent 70%),
+    radial-gradient(40rem 24rem at 100% 0%, color-mix(in oklab, var(--purple-mid) 45%, transparent), transparent 70%);
+}
+
+@utility text-brand-gradient {
+  background-image: linear-gradient(120deg, var(--purple-glow) 0%, var(--purple-bright) 50%, var(--purple-light) 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-heading text-white tracking-tight;
+  }
+  .surface-light :is(h1, h2, h3, h4) {
+    color: var(--foreground);
+  }
+  button:not(:disabled), [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  ::selection {
+    background-color: color-mix(in oklab, var(--purple-brand) 60%, transparent);
+    color: var(--white);
+  }
+}

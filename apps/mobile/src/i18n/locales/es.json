@@ -1,0 +1,70 @@
+{
+  "common": {
+    "appName": "Top Dance Academy",
+    "loading": "Cargando…",
+    "comingSoon": "Próximamente",
+    "language": {
+      "label": "Idioma",
+      "change": "Cambiar idioma",
+      "es": "Español",
+      "en": "English"
+    },
+    "contentLanguages": {
+      "available": "Idiomas disponibles",
+      "original": "Idioma original",
+      "audio": "Audio",
+      "subtitles": "Subtítulos",
+      "notAvailableInLocale": "Este contenido aún no está disponible en español."
+    }
+  },
+  "navigation": {
+    "home": "Inicio",
+    "courses": "Cursos",
+    "dashboard": "Mi panel",
+    "profile": "Perfil",
+    "login": "Iniciar sesión",
+    "register": "Crear cuenta"
+  },
+  "home": {
+    "eyebrow": "Academia de baile online",
+    "title": "Baila con técnica, musicalidad y confianza",
+    "subtitle": "Cursos en video de salsa, bachata y más, creados por instructores profesionales para que avances a tu ritmo.",
+    "primaryCta": "Explorar cursos",
+    "stylesTitle": "Lo que aprenderás",
+    "styles": {
+      "salsa": "Salsa",
+      "bachata": "Bachata",
+      "technique": "Técnica",
+      "musicality": "Musicalidad",
+      "coordination": "Coordinación",
+      "footwork": "Footwork",
+      "choreography": "Coreografía",
+      "competition": "Preparación para competencias"
+    }
+  },
+  "courses": {
+    "title": "Cursos",
+    "subtitle": "Explora el catálogo de Top Dance Academy.",
+    "emptyCatalog": "El catálogo estará disponible muy pronto."
+  },
+  "profile": {
+    "title": "Perfil",
+    "subtitle": "Administra tus datos y preferencias.",
+    "preferredLanguage": "Idioma de la interfaz",
+    "preferredLanguageHint": "El idioma de la interfaz es independiente del idioma de cada curso."
+  },
+  "validation": {
+    "required": "Este campo es obligatorio.",
+    "email": "Ingresa un correo electrónico válido.",
+    "minLength": "Debe tener al menos {min} caracteres."
+  },
+  "errors": {
+    "generic": "Algo salió mal. Inténtalo de nuevo.",
+    "network": "No se pudo conectar con el servidor."
+  },
+  "mobile": {
+    "deviceLanguage": "Idioma del dispositivo",
+    "deviceLanguageHint": "Usa el idioma configurado en tu teléfono.",
+    "selected": "Seleccionado"
+  }
+}

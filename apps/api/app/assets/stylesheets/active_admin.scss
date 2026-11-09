@@ -1,0 +1,130 @@
+// Top Dance visual identity for ActiveAdmin 3 (Sass variables must be
+// declared before Active Admin's styles are imported).
+// Official palette: see docs/design-system/README.md.
+$td-purple-darkest: #0f0a1a;
+$td-purple-dark: #1a1128;
+$td-purple-mid: #2d1b4e;
+$td-purple-brand: #6b3fa0;
+$td-purple-light: #8b5fcf;
+$td-purple-bright: #a87de8;
+$td-purple-glow: #c4a1f0;
+$td-gray-100: #f0edf5;
+$td-gray-200: #d4cfe0;
+$td-gray-300: #a89fba;
+$td-dark-bg: #0a0612;
+
+// The admin stays on light surfaces for long data-entry sessions, with the
+// brand purple for chrome, actions and links.
+$body-background-color: $td-gray-100;
+$primary-color: $td-purple-mid;
+$secondary-color: $td-gray-200;
+$text-color: $td-purple-dark;
+$link-color: $td-purple-brand;
+$section-header-text-color: $td-purple-mid;
+$current-menu-item-background: $td-purple-brand;
+$hover-menu-item-background: $td-purple-light;
+$table-stripe-color: #f7f5fa;
+$table-selected-color: #ece0fb;
+$error-color: #b91c1c;
+$breadcrumbs-color: $td-gray-300;
+$page-header-text-color: $td-gray-200;
+
+@import "active_admin/mixins";
+@import "active_admin/base";
+
+#header {
+  background: linear-gradient(90deg, $td-purple-darkest 0%, $td-purple-mid 100%);
+  border-bottom: 1px solid $td-purple-brand;
+  box-shadow: none;
+  text-shadow: none;
+
+  h1 a, #site_title {
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  ul.tabs > li > a,
+  #utility_nav > li > a {
+    color: $td-gray-200;
+  }
+
+  ul.tabs > li.current > a,
+  ul.tabs > li:hover > a {
+    background: $td-purple-brand;
+    color: #fff;
+    border-radius: 6px;
+  }
+}
+
+#title_bar {
+  background: $td-purple-dark;
+  border-bottom: 1px solid $td-purple-mid;
+  box-shadow: none;
+  text-shadow: none;
+
+  h2#page_title, .breadcrumb, .breadcrumb a {
+    color: $td-gray-100;
+    text-shadow: none;
+  }
+
+  .action_items span.action_item > a {
+    @include primary-gradient;
+  }
+}
+
+a.button, a:link.button, a:visited.button, input[type=submit], input[type=button], button {
+  background: $td-purple-brand;
+  background-image: none;
+  border: 1px solid $td-purple-brand;
+  border-radius: 8px;
+  box-shadow: none;
+  color: #fff;
+  text-shadow: none;
+
+  &:not(.disabled):hover {
+    background: $td-purple-light;
+    background-image: none;
+    border-color: $td-purple-light;
+  }
+}
+
+.panel, .sidebar_section {
+  border-radius: 10px;
+  overflow: hidden;
+
+  > h3 {
+    background: $td-purple-mid;
+    background-image: none;
+    border: none;
+    color: #fff;
+    text-shadow: none;
+  }
+}
+
+.status_tag {
+  background: $td-purple-brand;
+  border-radius: 999px;
+
+  &.yes, &.complete { background: #15803d; }
+  &.no, &.missing { background: #b91c1c; }
+  &.pending { background: #a16207; }
+}
+
+// Admin login page
+body.logged_out {
+  background: $td-dark-bg;
+
+  #content_wrapper #active_admin_content #login {
+    border-radius: 12px;
+    box-shadow: 0 0 32px -8px rgba($td-purple-bright, 0.55);
+
+    h2 {
+      background: $td-purple-mid;
+      background-image: none;
+      color: #fff;
+      text-shadow: none;
+      border-radius: 12px 12px 0 0;
+    }
+  }
+}

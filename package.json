@@ -1,0 +1,22 @@
+{
+  "name": "top-dance",
+  "private": true,
+  "packageManager": "pnpm@11.21.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "dev:web": "turbo run dev --filter=@top-dance/web",
+    "dev:api": "turbo run dev --filter=@top-dance/api",
+    "dev:mobile": "turbo run build --filter=@top-dance/api-client && pnpm --filter @top-dance/mobile start",
+    "api:generate": "bash infrastructure/scripts/generate-api-client.sh"
+  },
+  "devDependencies": {
+    "turbo": "^2.11.10"
+  }
+}

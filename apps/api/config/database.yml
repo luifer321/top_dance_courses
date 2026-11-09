@@ -1,0 +1,38 @@
+# PostgreSQL. Local development connects over TCP (Postgres.app, Homebrew or
+# Docker all listen on localhost:5432). Override with DATABASE_URL or the
+# DB_* variables in .env (see .env.example).
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("DB_HOST", "localhost") %>
+  port: <%= ENV.fetch("DB_PORT", 5432) %>
+  username: <%= ENV["DB_USERNAME"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
+
+development:
+  <<: *default
+  database: top_dance_development
+
+test:
+  <<: *default
+  database: top_dance_test
+
+# Production (Railway): one PostgreSQL service hosting four databases.
+# Solid Cache, Solid Queue and Solid Cable each keep their own schema.
+production:
+  primary: &primary_production
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+  cache:
+    <<: *primary_production
+    url: <%= ENV["CACHE_DATABASE_URL"] %>
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    url: <%= ENV["QUEUE_DATABASE_URL"] %>
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *primary_production
+    url: <%= ENV["CABLE_DATABASE_URL"] %>
+    migrations_paths: db/cable_migrate

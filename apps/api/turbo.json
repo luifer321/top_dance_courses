@@ -1,0 +1,14 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "test": {
+      "inputs": ["app/**", "config/**", "db/**", "lib/**", "spec/**", "Gemfile.lock"],
+      "outputs": []
+    },
+    "lint": {
+      "inputs": ["app/**", "config/**", "db/**", "lib/**", "spec/**", ".rubocop.yml"],
+      "outputs": []
+    }
+  }
+}

@@ -1,0 +1,10 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Prebuilt binaries ship via optional dependencies; install scripts are not needed.
+allowBuilds:
+  '@parcel/watcher': false
+  '@swc/core': false
+  sharp: false
+  unrs-resolver: false
