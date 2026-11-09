@@ -19,3 +19,6 @@ en:
       bad_request: "The request is missing required parameters."
       unprocessable: "The request could not be processed."
       internal: "Something went wrong. Please try again."
+      rate_limited: "Too many attempts. Please try again later."
+      google_unavailable: "Google sign-in is not configured."
+      google_conflict: "This Google account cannot be linked."

@@ -46,3 +46,6 @@ export type ApiError = Schemas["Error"];
 export type LocaleCode = Schemas["LocaleCode"];
 export type LocaleList = Schemas["LocaleList"];
 export type Health = Schemas["Health"];
+export type User = Schemas["User"];
+export type AuthSession = Schemas["AuthSession"];
+export type UserSession = Schemas["UserSession"];

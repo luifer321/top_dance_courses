@@ -2,12 +2,12 @@ module Api
   module V1
     # Base for every /api/v1 endpoint.
     #
-    # Authentication is not implemented yet. When it is, web requests will use
-    # the Rails session cookie (+ CSRF token) and mobile requests a bearer
-    # token; both resolve to the same User and the same Pundit policies.
-    # See docs/architecture/authentication.md.
+    # Web requests authenticate with the Rails session cookie (+ CSRF token);
+    # mobile requests send a bearer token. Both resolve to the same User and
+    # the same Pundit policies. See docs/architecture/authentication.md.
     class BaseController < ActionController::API
       include Pundit::Authorization
+      include StudentAuthentication
 
       around_action :with_request_locale
 
@@ -36,9 +36,15 @@ module Api
         render json: { error: { code: code.to_s, message: message } }, status: status
       end
 
+      def render_unprocessable(record)
+        message = record.errors.full_messages.first.presence || I18n.t("api.errors.unprocessable", locale: request_locale)
+        render json: { error: { code: "unprocessable", message: message } }, status: :unprocessable_content
+      end
+
       def render_not_found(_error = nil) = render_error(:not_found, :not_found)
       def render_bad_request(_error = nil) = render_error(:bad_request, :bad_request)
       def render_forbidden(_error = nil) = render_error(:forbidden, :forbidden)
+      def render_unauthorized(_error = nil) = render_error(:unauthorized, :unauthorized)
     end
   end
 end

@@ -1,5 +1,15 @@
 import type { ReactNode } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View, type PressableProps, type TextProps } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  type PressableProps,
+  type TextInputProps,
+  type TextProps,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { colors, radius, spacing, typography } from "@/theme/tokens";
@@ -43,15 +53,42 @@ export function Badge({ label }: { label: string }) {
   );
 }
 
-export function Button({ label, ...props }: PressableProps & { label: string }) {
+export function Button({
+  label,
+  variant = "default",
+  ...props
+}: PressableProps & { label: string; variant?: "default" | "outline" }) {
   return (
     <Pressable
       accessibilityRole="button"
-      style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
+      style={({ pressed }) => [
+        styles.button,
+        variant === "outline" && styles.buttonOutline,
+        pressed && styles.buttonPressed,
+      ]}
       {...props}
     >
-      <Text style={styles.buttonText}>{label}</Text>
+      <Text style={[styles.buttonText, variant === "outline" && styles.buttonOutlineText]}>{label}</Text>
     </Pressable>
+  );
+}
+
+export function Field({
+  label,
+  error,
+  ...props
+}: TextInputProps & { label: string; error?: string }) {
+  return (
+    <View style={styles.field}>
+      <Text style={styles.fieldLabel}>{label}</Text>
+      <TextInput
+        placeholderTextColor={colors.mutedForeground}
+        style={styles.input}
+        autoCapitalize="none"
+        {...props}
+      />
+      {error ? <Text style={styles.fieldError}>{error}</Text> : null}
+    </View>
   );
 }
 
@@ -96,4 +133,24 @@ const styles = StyleSheet.create({
   },
   buttonPressed: { opacity: 0.85 },
   buttonText: { ...typography.body, fontWeight: "600", color: colors.primaryForeground },
+  buttonOutline: {
+    backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: colors.border,
+    shadowOpacity: 0,
+  },
+  buttonOutlineText: { color: colors.foreground },
+  field: { gap: spacing.xs },
+  fieldLabel: { ...typography.caption, color: colors.mutedForeground },
+  input: {
+    ...typography.body,
+    color: colors.foreground,
+    backgroundColor: colors.card,
+    borderColor: colors.border,
+    borderWidth: 1,
+    borderRadius: radius.lg,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+  },
+  fieldError: { ...typography.caption, color: colors.destructive },
 });

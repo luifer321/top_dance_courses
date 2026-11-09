@@ -23,7 +23,8 @@
     "dashboard": "Dashboard",
     "profile": "Profile",
     "login": "Log in",
-    "register": "Sign up"
+    "register": "Sign up",
+    "logout": "Log out"
   },
   "home": {
     "eyebrow": "Online dance academy",
@@ -47,9 +48,37 @@
     "subtitle": "Explore the Top Dance catalog.",
     "emptyCatalog": "The catalog will be available very soon."
   },
+  "auth": {
+    "loginTitle": "Welcome back",
+    "loginSubtitle": "Log in to continue with your courses.",
+    "registerTitle": "Create your account",
+    "registerSubtitle": "Start learning with Top Dance.",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "submitLogin": "Log in",
+    "submitRegister": "Create account",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "or": "or",
+    "forgotPassword": "Forgot your password?",
+    "continueWithGoogle": "Continue with Google",
+    "googleUnavailable": "Google sign-in is not configured yet.",
+    "forgotTitle": "Reset your password",
+    "forgotSubtitle": "We'll send a reset link if that email has an account.",
+    "resetTitle": "Choose a new password",
+    "resetSubtitle": "Use at least 12 characters.",
+    "submitForgot": "Send reset link",
+    "submitReset": "Update password",
+    "resetEmailSent": "If that email has an account, a reset link is ready. In development it is written to the API log.",
+    "passwordUpdated": "Your password was updated. You can log in now.",
+    "missingResetToken": "This reset link is missing a token."
+  },
   "profile": {
     "title": "Profile",
     "subtitle": "Manage your details and preferences.",
+    "account": "Account",
+    "signedInAs": "Signed in as",
     "preferredLanguage": "Interface language",
     "preferredLanguageHint": "The interface language is independent of each course's language."
   },

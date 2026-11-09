@@ -23,7 +23,8 @@
     "dashboard": "Mi panel",
     "profile": "Perfil",
     "login": "Iniciar sesión",
-    "register": "Crear cuenta"
+    "register": "Crear cuenta",
+    "logout": "Cerrar sesión"
   },
   "home": {
     "eyebrow": "Academia de baile online",
@@ -47,9 +48,37 @@
     "subtitle": "Explora el catálogo de Top Dance.",
     "emptyCatalog": "El catálogo estará disponible muy pronto."
   },
+  "auth": {
+    "loginTitle": "Bienvenido de nuevo",
+    "loginSubtitle": "Inicia sesión para continuar con tus cursos.",
+    "registerTitle": "Crea tu cuenta",
+    "registerSubtitle": "Empieza a aprender con Top Dance.",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submitLogin": "Iniciar sesión",
+    "submitRegister": "Crear cuenta",
+    "noAccount": "¿No tienes cuenta?",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "or": "o",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "continueWithGoogle": "Continuar con Google",
+    "googleUnavailable": "El inicio de sesión con Google todavía no está configurado.",
+    "forgotTitle": "Restablece tu contraseña",
+    "forgotSubtitle": "Enviaremos un enlace de restablecimiento si ese correo tiene una cuenta.",
+    "resetTitle": "Elige una contraseña nueva",
+    "resetSubtitle": "Usa al menos 12 caracteres.",
+    "submitForgot": "Enviar enlace",
+    "submitReset": "Actualizar contraseña",
+    "resetEmailSent": "Si ese correo tiene una cuenta, el enlace de restablecimiento está listo. En desarrollo se escribe en el registro de la API.",
+    "passwordUpdated": "Tu contraseña se actualizó. Ya puedes iniciar sesión.",
+    "missingResetToken": "A este enlace de restablecimiento le falta el token."
+  },
   "profile": {
     "title": "Perfil",
     "subtitle": "Administra tus datos y preferencias.",
+    "account": "Cuenta",
+    "signedInAs": "Sesión iniciada como",
     "preferredLanguage": "Idioma de la interfaz",
     "preferredLanguageHint": "El idioma de la interfaz es independiente del idioma de cada curso."
   },

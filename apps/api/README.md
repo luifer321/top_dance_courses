@@ -3,6 +3,7 @@
 Rails 8.1 application (full Rails, not API-only) serving:
 
 - REST API under `/api/v1` (JSON, localized errors, OpenAPI via rswag)
+- Student auth at `/api/v1/auth` (email/password and Google, cookie or bearer token)
 - ActiveAdmin at `/admin` (Devise `AdminUser`, Spanish/English)
 - Solid Queue jobs (`bin/jobs`), Solid Cache, Solid Cable
 

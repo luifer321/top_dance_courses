@@ -19,3 +19,6 @@ es:
       bad_request: "Faltan parámetros obligatorios en la solicitud."
       unprocessable: "No se pudo procesar la solicitud."
       internal: "Algo salió mal. Inténtalo de nuevo."
+      rate_limited: "Demasiados intentos. Inténtalo de nuevo más tarde."
+      google_unavailable: "El inicio de sesión con Google no está configurado."
+      google_conflict: "No se puede vincular esta cuenta de Google."

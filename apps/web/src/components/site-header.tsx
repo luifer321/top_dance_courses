@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
+import { AuthStatus } from "@/components/auth-status";
 import { BrandLockup } from "@/components/brand-lockup";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 
 export async function SiteHeader() {
@@ -22,9 +22,7 @@ export async function SiteHeader() {
         </nav>
         <div className="ml-auto flex items-center gap-1.5">
           <LanguageSwitcher />
-          <Button asChild size="sm">
-            <Link href="/login">{t("login")}</Link>
-          </Button>
+          <AuthStatus />
         </div>
       </div>
     </header>

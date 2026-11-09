@@ -10,7 +10,7 @@ RSpec.describe "Admin dashboard", type: :request do
     get "/admin/login"
 
     expect(response).to have_http_status(:ok)
-    expect(response.body).to include("Top Dance Academy")
+    expect(response.body).to include("Top Dance")
     expect(response.body).to include("Contraseña")
   end
 

@@ -29,6 +29,20 @@ RSpec.configure do |config|
             required: false,
             description: "Interface language for messages (overrides Accept-Language).",
             schema: { "$ref" => "#/components/schemas/LocaleCode" }
+          },
+          authTransport: {
+            name: "X-Auth-Transport",
+            in: :header,
+            required: false,
+            description: "cookie for the website session, token for mobile bearer tokens.",
+            schema: { type: :string, enum: %w[cookie token] }
+          },
+          csrfToken: {
+            name: "X-CSRF-Token",
+            in: :header,
+            required: false,
+            description: "Required for state-changing cookie-authenticated requests.",
+            schema: { type: :string }
           }
         },
         schemas: {
@@ -74,6 +88,52 @@ RSpec.configure do |config|
             properties: {
               default_locale: { "$ref" => "#/components/schemas/LocaleCode" },
               locales: { type: :array, items: { "$ref" => "#/components/schemas/Locale" } }
+            }
+          },
+          User: {
+            type: :object,
+            required: %w[id name email preferred_locale],
+            additionalProperties: false,
+            properties: {
+              id: { type: :integer },
+              name: { type: :string },
+              email: { type: :string, format: :email },
+              preferred_locale: { "$ref" => "#/components/schemas/LocaleCode" }
+            }
+          },
+          UserSession: {
+            type: :object,
+            required: %w[user],
+            additionalProperties: false,
+            properties: {
+              user: { "$ref" => "#/components/schemas/User" }
+            }
+          },
+          AuthSession: {
+            type: :object,
+            required: %w[user access_token refresh_token expires_in],
+            additionalProperties: false,
+            properties: {
+              user: { "$ref" => "#/components/schemas/User" },
+              access_token: { type: :string },
+              refresh_token: { type: :string },
+              expires_in: { type: :integer }
+            }
+          },
+          CsrfToken: {
+            type: :object,
+            required: %w[csrf_token],
+            additionalProperties: false,
+            properties: {
+              csrf_token: { type: :string }
+            }
+          },
+          Ok: {
+            type: :object,
+            required: %w[ok],
+            additionalProperties: false,
+            properties: {
+              ok: { type: :boolean }
             }
           }
         }

@@ -1,13 +1,17 @@
+import { useRouter, type Href } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { Body, Card, Heading, Screen, Title } from "@/components/ui";
+import { Body, Button, Card, Heading, Screen, Title } from "@/components/ui";
+import { useAuth } from "@/features/auth/auth-context";
 import { getLocalePreference, setLocalePreference, SUPPORTED_LOCALES, type LocalePreference } from "@/i18n";
 import { colors, radius, spacing, typography } from "@/theme/tokens";
 
 export default function ProfileScreen() {
   const { t } = useTranslation();
+  const router = useRouter();
+  const { user, signOut } = useAuth();
   const [preference, setPreference] = useState<LocalePreference>("system");
 
   useEffect(() => {
@@ -28,6 +32,19 @@ export default function ProfileScreen() {
     <Screen>
       <Title>{t("profile.title")}</Title>
       <Body muted>{t("profile.subtitle")}</Body>
+      <Card>
+        <Heading>{t("profile.account")}</Heading>
+        {user ? (
+          <>
+            <Body>
+              {t("profile.signedInAs")} {user.email}
+            </Body>
+            <Button label={t("navigation.logout")} variant="outline" onPress={() => void signOut()} />
+          </>
+        ) : (
+          <Button label={t("navigation.login")} onPress={() => router.navigate("/login" as Href)} />
+        )}
+      </Card>
       <Card>
         <Heading>{t("profile.preferredLanguage")}</Heading>
         <Body muted>{t("profile.preferredLanguageHint")}</Body>
