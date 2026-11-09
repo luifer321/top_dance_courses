@@ -19,22 +19,24 @@ async function AuthPage({ params, mode }: LocalePageProps & { mode: "login" | "r
   const isLogin = mode === "login";
 
   return (
-    <div className="flex justify-center py-6">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="font-heading text-2xl text-white">
+    <div className="flex min-h-[calc(100dvh-12rem)] items-center justify-center py-8">
+      <Card className="w-full max-w-[24rem] gap-6 py-8 ring-1 ring-white/10">
+        <CardHeader className="px-8">
+          <CardTitle className="text-xl text-white">
             {isLogin ? t("loginTitle") : t("registerTitle")}
           </CardTitle>
-          <CardDescription>{isLogin ? t("loginSubtitle") : t("registerSubtitle")}</CardDescription>
+          <CardDescription className="text-[13px] leading-relaxed">
+            {isLogin ? t("loginSubtitle") : t("registerSubtitle")}
+          </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-8">
           <AuthForm mode={mode} />
         </CardContent>
-        <CardFooter className="gap-1 text-sm text-muted-foreground">
+        <CardFooter className="justify-center gap-1 border-t-0 bg-transparent px-8 pt-0 text-sm text-muted-foreground">
           {isLogin ? t("noAccount") : t("haveAccount")}
           <Link
             href={isLogin ? "/register" : "/login"}
-            className="text-purple-bright underline-offset-4 hover:underline"
+            className="font-medium text-purple-bright underline-offset-4 hover:underline"
           >
             {isLogin ? tNav("register") : tNav("login")}
           </Link>

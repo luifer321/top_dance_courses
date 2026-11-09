@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "Top Dance Academy",
-    "titleTemplate": "%s · Top Dance Academy",
-    "description": "Learn salsa, bachata, technique, musicality and choreography with Top Dance Academy video courses."
+    "title": "Top Dance",
+    "titleTemplate": "%s · Top Dance",
+    "description": "Learn salsa, bachata, technique, musicality and choreography with Top Dance video courses."
   },
   "common": {
-    "appName": "Top Dance Academy",
+    "appName": "Top Dance",
     "loading": "Loading…",
     "comingSoon": "Coming soon",
     "skipToContent": "Skip to content",
@@ -57,7 +57,7 @@
     "loginTitle": "Welcome back",
     "loginSubtitle": "Log in to continue with your courses.",
     "registerTitle": "Create your account",
-    "registerSubtitle": "Start learning with Top Dance Academy.",
+    "registerSubtitle": "Start learning with Top Dance.",
     "name": "Name",
     "email": "Email",
     "password": "Password",
@@ -75,7 +75,7 @@
   },
   "courses": {
     "title": "Courses",
-    "subtitle": "Explore the Top Dance Academy catalog.",
+    "subtitle": "Explore the Top Dance catalog.",
     "emptyCatalog": "The catalog will be available very soon.",
     "detailTitle": "Course details",
     "detailPlaceholder": "This course's information will be loaded from the API.",

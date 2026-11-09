@@ -55,10 +55,11 @@ Utilities: `bg-brand-gradient`, `bg-surface-gradient`, `text-brand-gradient`,
 
 ## Typography
 
-- Body: **Manrope** (`--font-body`, `font-sans`).
-- Headings: **Playfair Display** (`--font-display`, `font-heading`), white.
-- Self-hosted through `next/font` (works with static export). Mobile currently uses
-  the system font with the same scale (`typography` in the mobile tokens).
+- UI: **Inter** (`--font-body`, `font-sans`). Headings are Inter semibold, tight tracking, white.
+- Brand lockup: **Montserrat** (`--font-heading`) — “TOP” (600, 0.7rem, `--purple-light`,
+  letter-spacing 3px) and “DANCE” (900, 1.4rem, white, letter-spacing 1px), next to the
+  mark. Self-hosted through `next/font` with `latin` and `latin-ext`.
+- Mobile currently uses the system font with the same scale (`typography` in the mobile tokens).
 
 ## Contrast (WCAG 2.x)
 

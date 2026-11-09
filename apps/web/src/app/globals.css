@@ -195,14 +195,30 @@
 
 @utility bg-surface-gradient {
   background-image:
-    radial-gradient(60rem 30rem at 15% -10%, color-mix(in oklab, var(--purple-brand) 28%, transparent), transparent 70%),
-    radial-gradient(40rem 24rem at 100% 0%, color-mix(in oklab, var(--purple-mid) 45%, transparent), transparent 70%);
+    radial-gradient(50rem 28rem at 12% -18%, color-mix(in oklab, var(--purple-brand) 16%, transparent), transparent 72%),
+    radial-gradient(36rem 22rem at 100% 0%, color-mix(in oklab, var(--purple-mid) 22%, transparent), transparent 70%);
 }
 
 @utility text-brand-gradient {
   background-image: linear-gradient(120deg, var(--purple-glow) 0%, var(--purple-bright) 50%, var(--purple-light) 100%);
   background-clip: text;
   color: transparent;
+}
+
+.logo-top {
+  font-family: var(--font-heading), ui-sans-serif, sans-serif;
+  font-weight: 600;
+  font-size: 0.7rem;
+  color: var(--purple-light);
+  letter-spacing: 3px;
+}
+
+.logo-dance {
+  font-family: var(--font-heading), ui-sans-serif, sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  color: var(--white);
+  letter-spacing: 1px;
 }
 
 @layer base {
@@ -216,7 +232,7 @@
     @apply bg-background text-foreground antialiased;
   }
   h1, h2, h3, h4 {
-    @apply font-heading text-white tracking-tight;
+    @apply font-sans font-semibold tracking-tight text-white;
   }
   .surface-light :is(h1, h2, h3, h4) {
     color: var(--foreground);

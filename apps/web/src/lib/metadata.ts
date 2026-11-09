@@ -16,7 +16,7 @@ export async function localizedMetadata(
   );
 
   return {
-    title: title ?? t("title"),
+    title: title ?? { absolute: t("title") },
     description: t("description"),
     alternates: {
       canonical: getPathname({ locale, href: pathname }),

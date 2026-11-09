@@ -72,7 +72,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
             )}
           />
         ))}
-        <Button type="submit" size="lg" className="w-full">
+        <Button type="submit" size="lg" className="mt-1 w-full">
           {mode === "login" ? t("submitLogin") : t("submitRegister")}
         </Button>
       </FieldGroup>

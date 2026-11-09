@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Top Dance Academy",
+    "appName": "Top Dance",
     "loading": "Cargando…",
     "comingSoon": "Próximamente",
     "language": {
@@ -44,7 +44,7 @@
   },
   "courses": {
     "title": "Cursos",
-    "subtitle": "Explora el catálogo de Top Dance Academy.",
+    "subtitle": "Explora el catálogo de Top Dance.",
     "emptyCatalog": "El catálogo estará disponible muy pronto."
   },
   "profile": {
