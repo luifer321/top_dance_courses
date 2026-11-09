@@ -1,10 +1,9 @@
-import { DarkTheme, ThemeProvider } from "expo-router";
-import { NativeTabs } from "expo-router/native-tabs";
+import { DarkTheme, Stack, ThemeProvider } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
+import { AuthProvider } from "@/features/auth/auth-context";
 import { initI18n } from "@/i18n";
 import { colors } from "@/theme/tokens";
 
@@ -22,32 +21,6 @@ const navigationTheme = {
   },
 };
 
-function AppTabs() {
-  const { t } = useTranslation();
-
-  return (
-    <NativeTabs
-      backgroundColor={colors.background}
-      indicatorColor={colors.secondary}
-      iconColor={{ default: colors.mutedForeground, selected: colors.accentForeground }}
-      labelStyle={{ default: { color: colors.mutedForeground }, selected: { color: colors.heading } }}
-    >
-      <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>{t("navigation.home")}</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="house.fill" md="home" />
-      </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="courses">
-        <NativeTabs.Trigger.Label>{t("navigation.courses")}</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="play.rectangle.fill" md="video_library" />
-      </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="profile">
-        <NativeTabs.Trigger.Label>{t("navigation.profile")}</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="person.crop.circle.fill" md="account_circle" />
-      </NativeTabs.Trigger>
-    </NativeTabs>
-  );
-}
-
 export default function RootLayout() {
   const [ready, setReady] = useState(false);
 
@@ -63,7 +36,16 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={navigationTheme}>
       <StatusBar style="light" />
-      <AppTabs />
+      <AuthProvider>
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="course/[slug]" options={{ headerShown: true, title: "" }} />
+          <Stack.Screen name="lesson/[courseSlug]/[lessonSlug]" options={{ headerShown: true, title: "" }} />
+          <Stack.Screen name="login" />
+          <Stack.Screen name="register" />
+          <Stack.Screen name="forgot-password" />
+        </Stack>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

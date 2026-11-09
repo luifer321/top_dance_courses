@@ -8,6 +8,282 @@ servers:
 - url: http://localhost:3001
   description: Local development
 paths:
+  "/api/v1/auth/csrf":
+    get:
+      summary: CSRF token for cookie-authenticated requests
+      tags:
+      - Auth
+      operationId: getCsrfToken
+      responses:
+        '200':
+          description: token for X-CSRF-Token
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CsrfToken"
+  "/api/v1/auth/register":
+    post:
+      summary: Create a student account
+      tags:
+      - Auth
+      operationId: register
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      - "$ref": "#/components/parameters/csrfToken"
+      - "$ref": "#/components/parameters/locale"
+      responses:
+        '201':
+          description: account created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AuthSession"
+        '422':
+          description: invalid attributes
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - email
+              - password
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+  "/api/v1/auth/login":
+    post:
+      summary: Sign in with email and password
+      tags:
+      - Auth
+      operationId: login
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      - "$ref": "#/components/parameters/csrfToken"
+      responses:
+        '200':
+          description: signed in
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AuthSession"
+        '401':
+          description: unknown email or wrong password
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+  "/api/v1/auth/google":
+    post:
+      summary: Sign in with a Google ID token
+      tags:
+      - Auth
+      operationId: googleAuth
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      - "$ref": "#/components/parameters/csrfToken"
+      responses:
+        '200':
+          description: signed in with Google
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AuthSession"
+        '422':
+          description: Google sign-in is not configured
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - id_token
+              properties:
+                id_token:
+                  type: string
+  "/api/v1/auth/session":
+    delete:
+      summary: Sign out
+      tags:
+      - Auth
+      operationId: logout
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      - "$ref": "#/components/parameters/csrfToken"
+      responses:
+        '200':
+          description: signed out
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Ok"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+  "/api/v1/auth/refresh":
+    post:
+      summary: Rotate a mobile refresh token
+      tags:
+      - Auth
+      operationId: refreshSession
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      responses:
+        '200':
+          description: new access and refresh tokens
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AuthSession"
+        '401':
+          description: invalid or reused refresh token
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - refresh_token
+              properties:
+                refresh_token:
+                  type: string
+  "/api/v1/auth/password":
+    post:
+      summary: Request a password reset
+      tags:
+      - Auth
+      operationId: requestPasswordReset
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      - "$ref": "#/components/parameters/csrfToken"
+      responses:
+        '200':
+          description: always succeeds
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Ok"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              properties:
+                email:
+                  type: string
+  "/api/v1/auth/password/reset":
+    post:
+      summary: Set a new password from a reset token
+      tags:
+      - Auth
+      operationId: resetPassword
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      responses:
+        '200':
+          description: password updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Ok"
+        '422':
+          description: invalid token
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - token
+              - password
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+  "/api/v1/courses":
+    get:
+      summary: Published course catalog
+      tags:
+      - Courses
+      operationId: listCourses
+      parameters:
+      - "$ref": "#/components/parameters/locale"
+      responses:
+        '200':
+          description: published courses
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CourseList"
+  "/api/v1/courses/{slug}":
+    parameters:
+    - name: slug
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Published course
+      tags:
+      - Courses
+      operationId: getCourse
+      parameters:
+      - "$ref": "#/components/parameters/locale"
+      responses:
+        '200':
+          description: course with modules and lessons
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CourseDetail"
+        '404':
+          description: unknown or unpublished course
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
   "/api/v1/health":
     get:
       summary: Readiness check
@@ -21,6 +297,81 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Health"
+  "/api/v1/courses/{slug}/lessons/{lesson_slug}/playback":
+    parameters:
+    - name: slug
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: lesson_slug
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Signed Bunny embed URL
+      tags:
+      - Courses
+      operationId: getLessonPlayback
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: signed embed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Playback"
+        '401':
+          description: signed out
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+        '422':
+          description: playback not configured
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+  "/api/v1/courses/{slug}/lessons/{lesson_slug}":
+    parameters:
+    - name: slug
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: lesson_slug
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Published lesson
+      tags:
+      - Courses
+      operationId: getLesson
+      parameters:
+      - "$ref": "#/components/parameters/locale"
+      responses:
+        '200':
+          description: lesson details
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LessonDetail"
+        '404':
+          description: unpublished lesson
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
   "/api/v1/locales":
     get:
       summary: Supported interface languages
@@ -36,6 +387,68 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/LocaleList"
+  "/api/v1/me":
+    get:
+      summary: The signed-in student
+      tags:
+      - Users
+      operationId: getMe
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: current user
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+        '401':
+          description: signed out
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+    patch:
+      summary: Update the signed-in student
+      tags:
+      - Users
+      operationId: updateMe
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      - "$ref": "#/components/parameters/csrfToken"
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+        '401':
+          description: signed out
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                preferred_locale:
+                  "$ref": "#/components/schemas/LocaleCode"
 components:
   parameters:
     locale:
@@ -45,6 +458,23 @@ components:
       description: Interface language for messages (overrides Accept-Language).
       schema:
         "$ref": "#/components/schemas/LocaleCode"
+    authTransport:
+      name: X-Auth-Transport
+      in: header
+      required: false
+      description: cookie for the website session, token for mobile bearer tokens.
+      schema:
+        type: string
+        enum:
+        - cookie
+        - token
+    csrfToken:
+      name: X-CSRF-Token
+      in: header
+      required: false
+      description: Required for state-changing cookie-authenticated requests.
+      schema:
+        type: string
   schemas:
     LocaleCode:
       type: string
@@ -110,3 +540,266 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/Locale"
+    User:
+      type: object
+      required:
+      - id
+      - name
+      - email
+      - preferred_locale
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        preferred_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+    UserSession:
+      type: object
+      required:
+      - user
+      additionalProperties: false
+      properties:
+        user:
+          "$ref": "#/components/schemas/User"
+    AuthSession:
+      type: object
+      required:
+      - user
+      - access_token
+      - refresh_token
+      - expires_in
+      additionalProperties: false
+      properties:
+        user:
+          "$ref": "#/components/schemas/User"
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        expires_in:
+          type: integer
+    CsrfToken:
+      type: object
+      required:
+      - csrf_token
+      additionalProperties: false
+      properties:
+        csrf_token:
+          type: string
+    Ok:
+      type: object
+      required:
+      - ok
+      additionalProperties: false
+      properties:
+        ok:
+          type: boolean
+    AvailableLanguages:
+      type: object
+      required:
+      - text
+      - audio
+      - subtitles
+      additionalProperties: false
+      properties:
+        text:
+          type: array
+          items:
+            "$ref": "#/components/schemas/LocaleCode"
+        audio:
+          type: array
+          items:
+            "$ref": "#/components/schemas/LocaleCode"
+        subtitles:
+          type: array
+          items:
+            "$ref": "#/components/schemas/LocaleCode"
+    CourseSummary:
+      type: object
+      required:
+      - slug
+      - original_language
+      - requested_locale
+      - content_locale
+      - title
+      - available_languages
+      additionalProperties: false
+      properties:
+        slug:
+          type: string
+        level:
+          type: string
+          nullable: true
+          enum:
+          - beginner
+          - intermediate
+          - advanced
+        original_language:
+          "$ref": "#/components/schemas/LocaleCode"
+        requested_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        content_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        available_languages:
+          "$ref": "#/components/schemas/AvailableLanguages"
+    CourseLessonSummary:
+      type: object
+      required:
+      - slug
+      - title
+      - content_locale
+      additionalProperties: false
+      properties:
+        slug:
+          type: string
+        title:
+          type: string
+        duration_seconds:
+          type: integer
+          nullable: true
+        content_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+    CourseModule:
+      type: object
+      required:
+      - position
+      - title
+      - content_locale
+      - lessons
+      additionalProperties: false
+      properties:
+        position:
+          type: integer
+        title:
+          type: string
+        content_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        lessons:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CourseLessonSummary"
+    Course:
+      type: object
+      required:
+      - slug
+      - original_language
+      - requested_locale
+      - content_locale
+      - title
+      - available_languages
+      - modules
+      additionalProperties: false
+      properties:
+        slug:
+          type: string
+        level:
+          type: string
+          nullable: true
+          enum:
+          - beginner
+          - intermediate
+          - advanced
+        original_language:
+          "$ref": "#/components/schemas/LocaleCode"
+        requested_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        content_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        available_languages:
+          "$ref": "#/components/schemas/AvailableLanguages"
+        modules:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CourseModule"
+    CourseList:
+      type: object
+      required:
+      - courses
+      additionalProperties: false
+      properties:
+        courses:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CourseSummary"
+    CourseDetail:
+      type: object
+      required:
+      - course
+      additionalProperties: false
+      properties:
+        course:
+          "$ref": "#/components/schemas/Course"
+    Lesson:
+      type: object
+      required:
+      - slug
+      - title
+      - content_locale
+      - course_slug
+      - original_language
+      - requested_locale
+      - available_languages
+      additionalProperties: false
+      properties:
+        slug:
+          type: string
+        title:
+          type: string
+        duration_seconds:
+          type: integer
+          nullable: true
+        content_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        course_slug:
+          type: string
+        description:
+          type: string
+          nullable: true
+        original_language:
+          "$ref": "#/components/schemas/LocaleCode"
+        requested_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        available_languages:
+          "$ref": "#/components/schemas/AvailableLanguages"
+        previous_slug:
+          type: string
+          nullable: true
+        next_slug:
+          type: string
+          nullable: true
+    LessonDetail:
+      type: object
+      required:
+      - lesson
+      additionalProperties: false
+      properties:
+        lesson:
+          "$ref": "#/components/schemas/Lesson"
+    Playback:
+      type: object
+      required:
+      - embed_url
+      - expires_at
+      additionalProperties: false
+      properties:
+        embed_url:
+          type: string
+          format: uri
+        expires_at:
+          type: string
+          format: date-time

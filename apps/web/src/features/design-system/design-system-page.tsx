@@ -119,7 +119,7 @@ export async function DesignSystemPage({ params }: LocalePageProps) {
       </Section>
 
       <Section title={t("typography")}>
-        <p className="text-5xl font-semibold text-brand-gradient font-heading">{t("headingSample")}</p>
+        <p className="text-5xl font-semibold tracking-tight text-brand-gradient">{t("headingSample")}</p>
         <h1 className="text-4xl font-semibold">{t("headingSample")}</h1>
         <h2 className="text-3xl font-semibold">{t("headingSample")}</h2>
         <h3 className="text-2xl font-semibold">{t("headingSample")}</h3>

@@ -8,7 +8,7 @@ describe("createLoginSchema", () => {
   const schema = createLoginSchema(t);
 
   it("accepts valid credentials", () => {
-    expect(schema.safeParse({ email: "ana@example.com", password: "12345678" }).success).toBe(true);
+    expect(schema.safeParse({ email: "ana@example.com", password: "123456789012" }).success).toBe(true);
   });
 
   it("returns translated messages", () => {
@@ -16,7 +16,7 @@ describe("createLoginSchema", () => {
     expect(result.success).toBe(false);
     const messages = result.error!.issues.map((issue) => issue.message);
     expect(messages).toContain("email");
-    expect(messages).toContain('minLength:{"min":8}');
+    expect(messages).toContain('minLength:{"min":12}');
   });
 
   it("requires both fields", () => {

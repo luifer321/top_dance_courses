@@ -1,52 +1,80 @@
-# Authentication and authorization (design)
+# Authentication and authorization
 
-> Status: **design only.** The foundation includes Devise (admin users), Pundit and the
-> API base controller. Student sign-up/sign-in flows are not implemented yet; the web
-> login/register forms validate input and show "not available yet".
+Student accounts (`User`) are separate from staff (`AdminUser`). Signing up on the
+website or in the app never grants access to `/admin`.
 
-## Principles
+## Students
 
-- One identity store: a Devise `User` model in Rails (separate from `AdminUser`).
-- Authorization happens **only in Rails**, through Pundit policies and policy scopes on
-  every API action. Clients hide UI they can't use, but never enforce access.
-- No credentials in client bundles. Anything with `NEXT_PUBLIC_` / `EXPO_PUBLIC_` is public.
-- Student data and subscription state are only returned to the owning user (or admins).
+- Identity lives in Rails: Devise `User`, Pundit policies, one record for web and mobile.
+- Email/password (12–128 characters, bcrypt) or Google (ID token).
+- Sign-in is immediate. Email confirmation is deferred until Resend is connected.
+- Password reset is available. In development the reset URL is written to the Rails log.
+  Production delivery waits on Resend.
+- `users.preferred_locale` defaults to Spanish and is taken from `Accept-Language` at
+  registration.
 
-## Web: session cookie
+### Google linking
 
-The web app is static and served from `topdance.academy`; the API is
-`api.topdance.academy`. Both are the same *site*, so a first-party cookie works.
+After the ID token signature, audience, expiry and `email_verified` succeed:
 
-- Devise session stored in Rails' encrypted cookie, flags `HttpOnly`, `Secure`,
-  `SameSite=Lax`, scoped to the API host (no `Domain` attribute unless needed).
-- Requests use `credentials: "include"` (`apps/web/src/lib/api.ts`); CORS allows only the
-  exact origins in `CORS_ORIGINS` with `Access-Control-Allow-Credentials: true`.
-- CSRF: an endpoint such as `GET /api/v1/csrf` returns a token that the client sends in
-  `X-CSRF-Token` for state-changing requests. Requests without a valid token are rejected.
-- Session timeout and rotation on sign-in; sign-out invalidates the session server-side.
+- No user with that email: create the user and a `google` identity (`sub`).
+- Same Google `sub` already stored: sign that user in.
+- Email exists only as an unverified password signup: attach Google, mark the email
+  verified, and clear the password. The earlier password can no longer be used.
+- Email exists and is already verified: attach only when the Google `sub` matches;
+  otherwise reject.
+
+`GOOGLE_OAUTH_CLIENT_IDS` is a comma-separated allowlist of web, iOS and Android client
+IDs. When it is empty, `POST /api/v1/auth/google` returns `google_unavailable` and
+email/password still works.
+
+### Web: session cookie
+
+The web app is static (`topdance.academy`); the API is `api.topdance.academy`. Both are
+the same *site*, so a first-party cookie works.
+
+- Encrypted session cookie on the API host, `HttpOnly`, `Secure` in production,
+  `SameSite=Lax`, no `Domain` attribute.
+- Requests use `credentials: "include"` and `X-Auth-Transport: cookie`.
+- `GET /api/v1/auth/csrf` returns a token sent as `X-CSRF-Token` on state-changing
+  requests. Sign-in calls `reset_session`. Idle timeout is 2 hours.
 
 Local development uses `localhost:3000` → `localhost:3001`, which is also same-site.
 
-## Mobile: tokens
+### Mobile: tokens
 
-Native apps can't rely on browser cookies, so they use tokens:
+- Short-lived access JWT (15 minutes) as `Authorization: Bearer …` with
+  `X-Auth-Transport: token`.
+- Rotating refresh token, 30 days, stored hashed with a family id. Reuse of an old
+  token revokes the family.
+- Tokens live in `expo-secure-store` (Keychain / Keystore).
 
-- Short-lived access token (≈15 min), sent as `Authorization: Bearer …` through
-  `createApiClient({ getAuthHeaders })`.
-- Long-lived **rotating** refresh token, single-use, stored hashed in the database with a
-  family id so reuse of an old token revokes the whole family.
-- Tokens stored in `expo-secure-store` (Keychain / Keystore), never AsyncStorage.
-- Candidate implementations: `devise-jwt` with a denylist, or a small custom token table;
-  decide when implementing.
+## Admins
+
+Admins (`AdminUser`) sign in only through ActiveAdmin at `/admin` with a 2-hour
+inactivity timeout. Development seed: `cd apps/api && bin/rails db:seed`
+(`admin@topdance.local` / `topdance-dev-password`).
 
 ## Shared rules
 
-- Same `User`, same Pundit policies for both clients.
-- Passwords: Devise `bcrypt`, length 12–128, paranoid mode (no account enumeration),
-  rate limiting on auth endpoints (Rails 8 `rate_limit`).
-- Email confirmation and password reset emails via Resend (planned), localized using
-  `users.preferred_locale`.
-- Admins (`AdminUser`) sign in only through ActiveAdmin at `/admin` with a 2-hour
-  inactivity timeout.
+- Authorization happens **only in Rails**, through Pundit. Clients hide UI they can't
+  use, but never enforce access.
+- No credentials in client bundles. Anything with `NEXT_PUBLIC_` / `EXPO_PUBLIC_` is
+  public.
+- Unknown email and wrong password return the same localized `unauthorized` error.
+  Password reset always returns success, even when the email is unknown.
+- Auth endpoints are rate limited (Rails 8 `rate_limit`).
 - Video: lesson playback URLs are signed, short-lived Bunny Stream URLs generated by
   Rails after a Pundit check; raw video ids/library keys are never exposed.
+
+## Google Cloud setup (manual)
+
+Create an OAuth consent screen and client IDs:
+
+- Web client, authorized JavaScript origin `http://localhost:3000` (and production
+  `https://topdance.academy`), used as `NEXT_PUBLIC_GOOGLE_CLIENT_ID` and listed in
+  `GOOGLE_OAUTH_CLIENT_IDS`.
+- iOS client (`academy.topdance.app`) as `EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID`.
+- Android client (`academy.topdance.app`) as `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID`.
+
+All three IDs belong in `GOOGLE_OAUTH_CLIENT_IDS` on the API.

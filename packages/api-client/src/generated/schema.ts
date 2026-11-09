@@ -4,6 +4,178 @@
  */
 
 export interface paths {
+    "/api/v1/auth/csrf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** CSRF token for cookie-authenticated requests */
+        get: operations["getCsrfToken"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a student account */
+        post: operations["register"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign in with email and password */
+        post: operations["login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/google": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign in with a Google ID token */
+        post: operations["googleAuth"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/session": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Sign out */
+        delete: operations["logout"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Rotate a mobile refresh token */
+        post: operations["refreshSession"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Request a password reset */
+        post: operations["requestPasswordReset"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/password/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Set a new password from a reset token */
+        post: operations["resetPassword"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/courses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Published course catalog */
+        get: operations["listCourses"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/courses/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        /** Published course */
+        get: operations["getCourse"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/health": {
         parameters: {
             query?: never;
@@ -13,6 +185,46 @@ export interface paths {
         };
         /** Readiness check */
         get: operations["getHealth"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/courses/{slug}/lessons/{lesson_slug}/playback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+                lesson_slug: string;
+            };
+            cookie?: never;
+        };
+        /** Signed Bunny embed URL */
+        get: operations["getLessonPlayback"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/courses/{slug}/lessons/{lesson_slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+                lesson_slug: string;
+            };
+            cookie?: never;
+        };
+        /** Published lesson */
+        get: operations["getLesson"];
         put?: never;
         post?: never;
         delete?: never;
@@ -36,6 +248,24 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The signed-in student */
+        get: operations["getMe"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update the signed-in student */
+        patch: operations["updateMe"];
         trace?: never;
     };
 }
@@ -65,11 +295,105 @@ export interface components {
             default_locale: components["schemas"]["LocaleCode"];
             locales: components["schemas"]["Locale"][];
         };
+        User: {
+            id: number;
+            name: string;
+            /** Format: email */
+            email: string;
+            preferred_locale: components["schemas"]["LocaleCode"];
+        };
+        UserSession: {
+            user: components["schemas"]["User"];
+        };
+        AuthSession: {
+            user: components["schemas"]["User"];
+            access_token: string;
+            refresh_token: string;
+            expires_in: number;
+        };
+        CsrfToken: {
+            csrf_token: string;
+        };
+        Ok: {
+            ok: boolean;
+        };
+        AvailableLanguages: {
+            text: components["schemas"]["LocaleCode"][];
+            audio: components["schemas"]["LocaleCode"][];
+            subtitles: components["schemas"]["LocaleCode"][];
+        };
+        CourseSummary: {
+            slug: string;
+            /** @enum {string|null} */
+            level?: "beginner" | "intermediate" | "advanced" | null;
+            original_language: components["schemas"]["LocaleCode"];
+            requested_locale: components["schemas"]["LocaleCode"];
+            content_locale: components["schemas"]["LocaleCode"];
+            title: string;
+            description?: string | null;
+            available_languages: components["schemas"]["AvailableLanguages"];
+        };
+        CourseLessonSummary: {
+            slug: string;
+            title: string;
+            duration_seconds?: number | null;
+            content_locale: components["schemas"]["LocaleCode"];
+        };
+        CourseModule: {
+            position: number;
+            title: string;
+            content_locale: components["schemas"]["LocaleCode"];
+            lessons: components["schemas"]["CourseLessonSummary"][];
+        };
+        Course: {
+            slug: string;
+            /** @enum {string|null} */
+            level?: "beginner" | "intermediate" | "advanced" | null;
+            original_language: components["schemas"]["LocaleCode"];
+            requested_locale: components["schemas"]["LocaleCode"];
+            content_locale: components["schemas"]["LocaleCode"];
+            title: string;
+            description?: string | null;
+            available_languages: components["schemas"]["AvailableLanguages"];
+            modules: components["schemas"]["CourseModule"][];
+        };
+        CourseList: {
+            courses: components["schemas"]["CourseSummary"][];
+        };
+        CourseDetail: {
+            course: components["schemas"]["Course"];
+        };
+        Lesson: {
+            slug: string;
+            title: string;
+            duration_seconds?: number | null;
+            content_locale: components["schemas"]["LocaleCode"];
+            course_slug: string;
+            description?: string | null;
+            original_language: components["schemas"]["LocaleCode"];
+            requested_locale: components["schemas"]["LocaleCode"];
+            available_languages: components["schemas"]["AvailableLanguages"];
+            previous_slug?: string | null;
+            next_slug?: string | null;
+        };
+        LessonDetail: {
+            lesson: components["schemas"]["Lesson"];
+        };
+        Playback: {
+            /** Format: uri */
+            embed_url: string;
+            /** Format: date-time */
+            expires_at: string;
+        };
     };
     responses: never;
     parameters: {
         /** @description Interface language for messages (overrides Accept-Language). */
         locale: components["schemas"]["LocaleCode"];
+        /** @description cookie for the website session, token for mobile bearer tokens. */
+        authTransport: "cookie" | "token";
+        /** @description Required for state-changing cookie-authenticated requests. */
+        csrfToken: string;
     };
     requestBodies: never;
     headers: never;
@@ -77,6 +401,348 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    getCsrfToken: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description token for X-CSRF-Token */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CsrfToken"];
+                };
+            };
+        };
+    };
+    register: {
+        parameters: {
+            query?: {
+                /** @description Interface language for messages (overrides Accept-Language). */
+                locale?: components["parameters"]["locale"];
+            };
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+                /** @description Required for state-changing cookie-authenticated requests. */
+                "X-CSRF-Token"?: components["parameters"]["csrfToken"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    name: string;
+                    email: string;
+                    password: string;
+                };
+            };
+        };
+        responses: {
+            /** @description account created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthSession"];
+                };
+            };
+            /** @description invalid attributes */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    login: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+                /** @description Required for state-changing cookie-authenticated requests. */
+                "X-CSRF-Token"?: components["parameters"]["csrfToken"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    email: string;
+                    password: string;
+                };
+            };
+        };
+        responses: {
+            /** @description signed in */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthSession"];
+                };
+            };
+            /** @description unknown email or wrong password */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    googleAuth: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+                /** @description Required for state-changing cookie-authenticated requests. */
+                "X-CSRF-Token"?: components["parameters"]["csrfToken"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    id_token: string;
+                };
+            };
+        };
+        responses: {
+            /** @description signed in with Google */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthSession"];
+                };
+            };
+            /** @description Google sign-in is not configured */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    logout: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+                /** @description Required for state-changing cookie-authenticated requests. */
+                "X-CSRF-Token"?: components["parameters"]["csrfToken"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    refresh_token?: string;
+                };
+            };
+        };
+        responses: {
+            /** @description signed out */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    refreshSession: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    refresh_token: string;
+                };
+            };
+        };
+        responses: {
+            /** @description new access and refresh tokens */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthSession"];
+                };
+            };
+            /** @description invalid or reused refresh token */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    requestPasswordReset: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+                /** @description Required for state-changing cookie-authenticated requests. */
+                "X-CSRF-Token"?: components["parameters"]["csrfToken"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    email: string;
+                };
+            };
+        };
+        responses: {
+            /** @description always succeeds */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+        };
+    };
+    resetPassword: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    token: string;
+                    password: string;
+                };
+            };
+        };
+        responses: {
+            /** @description password updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ok"];
+                };
+            };
+            /** @description invalid token */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    listCourses: {
+        parameters: {
+            query?: {
+                /** @description Interface language for messages (overrides Accept-Language). */
+                locale?: components["parameters"]["locale"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description published courses */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourseList"];
+                };
+            };
+        };
+    };
+    getCourse: {
+        parameters: {
+            query?: {
+                /** @description Interface language for messages (overrides Accept-Language). */
+                locale?: components["parameters"]["locale"];
+            };
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description course with modules and lessons */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourseDetail"];
+                };
+            };
+            /** @description unknown or unpublished course */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
     getHealth: {
         parameters: {
             query?: never;
@@ -93,6 +759,86 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Health"];
+                };
+            };
+        };
+    };
+    getLessonPlayback: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+                Authorization?: string;
+            };
+            path: {
+                slug: string;
+                lesson_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description signed embed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Playback"];
+                };
+            };
+            /** @description signed out */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description playback not configured */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    getLesson: {
+        parameters: {
+            query?: {
+                /** @description Interface language for messages (overrides Accept-Language). */
+                locale?: components["parameters"]["locale"];
+            };
+            header?: never;
+            path: {
+                slug: string;
+                lesson_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description lesson details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LessonDetail"];
+                };
+            };
+            /** @description unpublished lesson */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
                 };
             };
         };
@@ -116,6 +862,81 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LocaleList"];
+                };
+            };
+        };
+    };
+    getMe: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+                Authorization?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description current user */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+            /** @description signed out */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    updateMe: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+                /** @description Required for state-changing cookie-authenticated requests. */
+                "X-CSRF-Token"?: components["parameters"]["csrfToken"];
+                Authorization?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    name?: string;
+                    preferred_locale?: components["schemas"]["LocaleCode"];
+                };
+            };
+        };
+        responses: {
+            /** @description updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["User"];
+                };
+            };
+            /** @description signed out */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
                 };
             };
         };

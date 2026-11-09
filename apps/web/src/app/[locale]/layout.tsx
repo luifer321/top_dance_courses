@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { isLocale } from "@/i18n/routing";
 import { allLocaleParams } from "@/i18n/static-params";
-import { bodyFont, displayFont } from "../fonts";
+import { bodyFont, headingFont } from "../fonts";
 import "../globals.css";
 
 export const dynamicParams = false;
@@ -44,8 +44,8 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   const t = await getTranslations({ locale, namespace: "common" });
 
   return (
-    <html lang={locale} className={`dark ${bodyFont.variable} ${displayFont.variable}`}>
-      <body className="flex min-h-dvh flex-col bg-surface-gradient bg-no-repeat">
+    <html lang={locale} className={`dark ${bodyFont.variable} ${headingFont.variable} ${bodyFont.className}`}>
+      <body className="flex min-h-dvh flex-col bg-background bg-surface-gradient bg-no-repeat antialiased">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
@@ -55,7 +55,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
         <NextIntlClientProvider>
           <Providers>
             <SiteHeader />
-            <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6">
+            <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">
               {children}
             </main>
             <SiteFooter />

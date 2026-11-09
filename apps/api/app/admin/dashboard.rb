@@ -17,8 +17,12 @@ ActiveAdmin.register_page "Dashboard" do
       end
 
       column do
-        panel I18n.t("admin.dashboard.next_steps") do
-          para I18n.t("admin.dashboard.next_steps_hint")
+        panel I18n.t("admin.dashboard.catalog") do
+          ul do
+            li "#{I18n.t("admin.dashboard.published_courses")}: #{Course.visible.count}"
+            li "#{I18n.t("admin.dashboard.lessons_missing_es")}: #{Lesson.missing_translation("es").count}"
+            li "#{I18n.t("admin.dashboard.lessons_missing_en")}: #{Lesson.missing_translation("en").count}"
+          end
         end
       end
     end

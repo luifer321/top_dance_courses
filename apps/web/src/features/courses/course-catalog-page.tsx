@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/page-header";
-import { Card, CardContent } from "@/components/ui/card";
 import { enablePageLocale, type LocalePageProps } from "@/i18n/page-locale";
 import { localizedMetadata } from "@/lib/metadata";
+import { CourseCatalogClient } from "./course-catalog-client";
 
 export async function generateMetadata({ params }: LocalePageProps) {
   const { locale } = await enablePageLocale(params);
@@ -17,9 +17,7 @@ export async function CourseCatalogPage({ params }: LocalePageProps) {
   return (
     <>
       <PageHeader title={t("title")} description={t("subtitle")} />
-      <Card>
-        <CardContent className="text-muted-foreground">{t("emptyCatalog")}</CardContent>
-      </Card>
+      <CourseCatalogClient />
     </>
   );
 }

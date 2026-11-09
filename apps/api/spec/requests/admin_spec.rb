@@ -10,7 +10,7 @@ RSpec.describe "Admin dashboard", type: :request do
     get "/admin/login"
 
     expect(response).to have_http_status(:ok)
-    expect(response.body).to include("Top Dance Academy")
+    expect(response.body).to include("Top Dance")
     expect(response.body).to include("Contraseña")
   end
 
@@ -29,6 +29,27 @@ RSpec.describe "Admin dashboard", type: :request do
 
     expect(response).to have_http_status(:ok)
     expect(response.body).to include("Idiomas del contenido")
+  end
+
+  it "lists admin users" do
+    sign_in create(:admin_user)
+
+    get "/admin/admin_users"
+
+    expect(response).to have_http_status(:ok)
+  end
+
+  it "lists courses and lessons" do
+    sign_in create(:admin_user)
+    create_published_catalog_course
+
+    get "/admin/courses"
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include("salsa-basics")
+
+    get "/admin/lessons"
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include("paso-basico")
   end
 
   it "redirects the root path to the dashboard" do

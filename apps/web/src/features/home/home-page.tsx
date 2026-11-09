@@ -27,14 +27,16 @@ export async function HomePage({ params }: LocalePageProps) {
 
   return (
     <div className="flex flex-col gap-16">
-      <section className="flex max-w-3xl flex-col gap-6 pt-6 sm:pt-12">
-        <p className="text-sm font-medium tracking-wide text-accent-foreground uppercase">
+      <section className="flex max-w-3xl flex-col gap-5 pt-6 sm:pt-16">
+        <p className="text-xs font-medium tracking-[0.16em] text-purple-glow uppercase">
           {t("eyebrow")}
         </p>
-        <h1 className="text-4xl leading-tight font-semibold sm:text-6xl">
+        <h1 className="text-4xl leading-[1.12] sm:text-5xl lg:text-6xl">
           <span className="text-brand-gradient">{t("title")}</span>
         </h1>
-        <p className="text-lg text-muted-foreground">{t("subtitle")}</p>
+        <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          {t("subtitle")}
+        </p>
         <div className="flex flex-wrap gap-3">
           <Button asChild size="lg" className="shadow-glow">
             <Link href="/courses">{t("primaryCta")}</Link>

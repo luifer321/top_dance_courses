@@ -1,11 +1,11 @@
 {
   "metadata": {
-    "title": "Top Dance Academy",
-    "titleTemplate": "%s · Top Dance Academy",
-    "description": "Aprende salsa, bachata, técnica, musicalidad y coreografía con cursos en video de Top Dance Academy."
+    "title": "Top Dance",
+    "titleTemplate": "%s · Top Dance",
+    "description": "Aprende salsa, bachata, técnica, musicalidad y coreografía con cursos en video de Top Dance."
   },
   "common": {
-    "appName": "Top Dance Academy",
+    "appName": "Top Dance",
     "loading": "Cargando…",
     "comingSoon": "Próximamente",
     "skipToContent": "Saltar al contenido",
@@ -32,6 +32,7 @@
     "profile": "Perfil",
     "login": "Iniciar sesión",
     "register": "Crear cuenta",
+    "logout": "Cerrar sesión",
     "mainMenu": "Menú principal",
     "footerRights": "Todos los derechos reservados."
   },
@@ -57,7 +58,7 @@
     "loginTitle": "Bienvenido de nuevo",
     "loginSubtitle": "Inicia sesión para continuar con tus cursos.",
     "registerTitle": "Crea tu cuenta",
-    "registerSubtitle": "Empieza a aprender con Top Dance Academy.",
+    "registerSubtitle": "Empieza a aprender con Top Dance.",
     "name": "Nombre",
     "email": "Correo electrónico",
     "password": "Contraseña",
@@ -65,7 +66,19 @@
     "submitRegister": "Crear cuenta",
     "noAccount": "¿No tienes cuenta?",
     "haveAccount": "¿Ya tienes cuenta?",
-    "notAvailableYet": "La autenticación todavía no está disponible."
+    "or": "o",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "continueWithGoogle": "Continuar con Google",
+    "googleUnavailable": "El inicio de sesión con Google todavía no está configurado.",
+    "forgotTitle": "Restablece tu contraseña",
+    "forgotSubtitle": "Enviaremos un enlace de restablecimiento si ese correo tiene una cuenta.",
+    "resetTitle": "Elige una contraseña nueva",
+    "resetSubtitle": "Usa al menos 12 caracteres.",
+    "submitForgot": "Enviar enlace",
+    "submitReset": "Actualizar contraseña",
+    "resetEmailSent": "Si ese correo tiene una cuenta, el enlace de restablecimiento está listo. En desarrollo se escribe en el registro de la API.",
+    "passwordUpdated": "Tu contraseña se actualizó. Ya puedes iniciar sesión.",
+    "missingResetToken": "A este enlace de restablecimiento le falta el token."
   },
   "dashboard": {
     "title": "Mi panel",
@@ -75,20 +88,30 @@
   },
   "courses": {
     "title": "Cursos",
-    "subtitle": "Explora el catálogo de Top Dance Academy.",
+    "subtitle": "Explora el catálogo de Top Dance.",
     "emptyCatalog": "El catálogo estará disponible muy pronto.",
     "detailTitle": "Detalles del curso",
     "detailPlaceholder": "La información de este curso se cargará desde la API.",
     "modules": "Módulos",
     "lessons": "Lecciones",
-    "instructor": "Instructor"
+    "instructor": "Instructor",
+    "notFound": "Este curso no está disponible.",
+    "loadError": "No se pudo cargar este curso.",
+    "level": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzado"
+    }
   },
   "lessons": {
     "playerTitle": "Reproductor de lección",
     "playerPlaceholder": "El reproductor de video se conectará con Bunny Stream.",
     "previous": "Lección anterior",
     "next": "Siguiente lección",
-    "markComplete": "Marcar como completada"
+    "markComplete": "Marcar como completada",
+    "notFound": "Esta lección no está disponible.",
+    "signInToWatch": "Inicia sesión para ver esta lección.",
+    "playbackUnavailable": "La reproducción de esta lección todavía no está configurada."
   },
   "subscriptions": {
     "title": "Membresía",
@@ -99,6 +122,8 @@
   "profile": {
     "title": "Perfil",
     "subtitle": "Administra tus datos y preferencias.",
+    "account": "Cuenta",
+    "signedInAs": "Sesión iniciada como",
     "preferredLanguage": "Idioma de la interfaz",
     "preferredLanguageHint": "El idioma de la interfaz es independiente del idioma de cada curso."
   },

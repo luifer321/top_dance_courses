@@ -6,7 +6,7 @@ type ValidationT = (
   values?: Record<string, number>,
 ) => string;
 
-export const PASSWORD_MIN_LENGTH = 8;
+export const PASSWORD_MIN_LENGTH = 12;
 
 export function emailField(t: ValidationT) {
   return z.string().trim().min(1, t("required")).pipe(z.email(t("email")));

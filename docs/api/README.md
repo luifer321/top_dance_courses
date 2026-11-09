@@ -22,6 +22,16 @@ packages/api-client/src/generated/schema.ts (committed)
 | --- | --- | --- |
 | GET | `/api/v1/health` | Readiness: `{ status, database }`, 503 when the DB is down |
 | GET | `/api/v1/locales` | Supported interface languages, Spanish default |
+| GET | `/api/v1/auth/csrf` | CSRF token for cookie-authenticated requests |
+| POST | `/api/v1/auth/register` | Create a student (`name`, `email`, `password`) |
+| POST | `/api/v1/auth/login` | Email/password sign-in |
+| POST | `/api/v1/auth/google` | Google ID token sign-in |
+| DELETE | `/api/v1/auth/session` | Sign out (cookie or refresh token) |
+| POST | `/api/v1/auth/refresh` | Rotate a mobile refresh token |
+| POST | `/api/v1/auth/password` | Request a password reset |
+| POST | `/api/v1/auth/password/reset` | Set a new password from a reset token |
+| GET | `/api/v1/me` | Signed-in student |
+| PATCH | `/api/v1/me` | Update `name` or `preferred_locale` |
 | GET | `/up` | Rails liveness check (for Railway) |
 
 Interactive docs: http://localhost:3001/api-docs (enabled outside production, or with
@@ -31,7 +41,10 @@ Interactive docs: http://localhost:3001/api-docs (enabled outside production, or
 
 - Locale: `?locale=es|en` or `Accept-Language`; response has `Content-Language`.
 - Errors: `{ "error": { "code": "not_found", "message": "<localized>" } }` with codes
-  `bad_request`, `unauthorized`, `forbidden`, `not_found`, `unprocessable`, `internal`.
+  `bad_request`, `unauthorized`, `forbidden`, `not_found`, `unprocessable`, `internal`,
+  `rate_limited`, `google_unavailable`, `google_conflict`.
+- Web sends `X-Auth-Transport: cookie` and `X-CSRF-Token`. Mobile sends
+  `X-Auth-Transport: token` and `Authorization: Bearer …`.
 - Every endpoint gets an rswag spec with response schemas; `swagger_helper.rb` sets
   `openapi_strict_schema_validation`, so responses must match the documented schema.
 - Give each operation an `operationId`.

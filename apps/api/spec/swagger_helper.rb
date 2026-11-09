@@ -29,6 +29,20 @@ RSpec.configure do |config|
             required: false,
             description: "Interface language for messages (overrides Accept-Language).",
             schema: { "$ref" => "#/components/schemas/LocaleCode" }
+          },
+          authTransport: {
+            name: "X-Auth-Transport",
+            in: :header,
+            required: false,
+            description: "cookie for the website session, token for mobile bearer tokens.",
+            schema: { type: :string, enum: %w[cookie token] }
+          },
+          csrfToken: {
+            name: "X-CSRF-Token",
+            in: :header,
+            required: false,
+            description: "Required for state-changing cookie-authenticated requests.",
+            schema: { type: :string }
           }
         },
         schemas: {
@@ -74,6 +88,166 @@ RSpec.configure do |config|
             properties: {
               default_locale: { "$ref" => "#/components/schemas/LocaleCode" },
               locales: { type: :array, items: { "$ref" => "#/components/schemas/Locale" } }
+            }
+          },
+          User: {
+            type: :object,
+            required: %w[id name email preferred_locale],
+            additionalProperties: false,
+            properties: {
+              id: { type: :integer },
+              name: { type: :string },
+              email: { type: :string, format: :email },
+              preferred_locale: { "$ref" => "#/components/schemas/LocaleCode" }
+            }
+          },
+          UserSession: {
+            type: :object,
+            required: %w[user],
+            additionalProperties: false,
+            properties: {
+              user: { "$ref" => "#/components/schemas/User" }
+            }
+          },
+          AuthSession: {
+            type: :object,
+            required: %w[user access_token refresh_token expires_in],
+            additionalProperties: false,
+            properties: {
+              user: { "$ref" => "#/components/schemas/User" },
+              access_token: { type: :string },
+              refresh_token: { type: :string },
+              expires_in: { type: :integer }
+            }
+          },
+          CsrfToken: {
+            type: :object,
+            required: %w[csrf_token],
+            additionalProperties: false,
+            properties: {
+              csrf_token: { type: :string }
+            }
+          },
+          Ok: {
+            type: :object,
+            required: %w[ok],
+            additionalProperties: false,
+            properties: {
+              ok: { type: :boolean }
+            }
+          },
+          AvailableLanguages: {
+            type: :object,
+            required: %w[text audio subtitles],
+            additionalProperties: false,
+            properties: {
+              text: { type: :array, items: { "$ref" => "#/components/schemas/LocaleCode" } },
+              audio: { type: :array, items: { "$ref" => "#/components/schemas/LocaleCode" } },
+              subtitles: { type: :array, items: { "$ref" => "#/components/schemas/LocaleCode" } }
+            }
+          },
+          CourseSummary: {
+            type: :object,
+            required: %w[slug original_language requested_locale content_locale title available_languages],
+            additionalProperties: false,
+            properties: {
+              slug: { type: :string },
+              level: { type: :string, nullable: true, enum: %w[beginner intermediate advanced] },
+              original_language: { "$ref" => "#/components/schemas/LocaleCode" },
+              requested_locale: { "$ref" => "#/components/schemas/LocaleCode" },
+              content_locale: { "$ref" => "#/components/schemas/LocaleCode" },
+              title: { type: :string },
+              description: { type: :string, nullable: true },
+              available_languages: { "$ref" => "#/components/schemas/AvailableLanguages" }
+            }
+          },
+          CourseLessonSummary: {
+            type: :object,
+            required: %w[slug title content_locale],
+            additionalProperties: false,
+            properties: {
+              slug: { type: :string },
+              title: { type: :string },
+              duration_seconds: { type: :integer, nullable: true },
+              content_locale: { "$ref" => "#/components/schemas/LocaleCode" }
+            }
+          },
+          CourseModule: {
+            type: :object,
+            required: %w[position title content_locale lessons],
+            additionalProperties: false,
+            properties: {
+              position: { type: :integer },
+              title: { type: :string },
+              content_locale: { "$ref" => "#/components/schemas/LocaleCode" },
+              lessons: { type: :array, items: { "$ref" => "#/components/schemas/CourseLessonSummary" } }
+            }
+          },
+          Course: {
+            type: :object,
+            required: %w[slug original_language requested_locale content_locale title available_languages modules],
+            additionalProperties: false,
+            properties: {
+              slug: { type: :string },
+              level: { type: :string, nullable: true, enum: %w[beginner intermediate advanced] },
+              original_language: { "$ref" => "#/components/schemas/LocaleCode" },
+              requested_locale: { "$ref" => "#/components/schemas/LocaleCode" },
+              content_locale: { "$ref" => "#/components/schemas/LocaleCode" },
+              title: { type: :string },
+              description: { type: :string, nullable: true },
+              available_languages: { "$ref" => "#/components/schemas/AvailableLanguages" },
+              modules: { type: :array, items: { "$ref" => "#/components/schemas/CourseModule" } }
+            }
+          },
+          CourseList: {
+            type: :object,
+            required: %w[courses],
+            additionalProperties: false,
+            properties: {
+              courses: { type: :array, items: { "$ref" => "#/components/schemas/CourseSummary" } }
+            }
+          },
+          CourseDetail: {
+            type: :object,
+            required: %w[course],
+            additionalProperties: false,
+            properties: {
+              course: { "$ref" => "#/components/schemas/Course" }
+            }
+          },
+          Lesson: {
+            type: :object,
+            required: %w[slug title content_locale course_slug original_language requested_locale available_languages],
+            additionalProperties: false,
+            properties: {
+              slug: { type: :string },
+              title: { type: :string },
+              duration_seconds: { type: :integer, nullable: true },
+              content_locale: { "$ref" => "#/components/schemas/LocaleCode" },
+              course_slug: { type: :string },
+              description: { type: :string, nullable: true },
+              original_language: { "$ref" => "#/components/schemas/LocaleCode" },
+              requested_locale: { "$ref" => "#/components/schemas/LocaleCode" },
+              available_languages: { "$ref" => "#/components/schemas/AvailableLanguages" },
+              previous_slug: { type: :string, nullable: true },
+              next_slug: { type: :string, nullable: true }
+            }
+          },
+          LessonDetail: {
+            type: :object,
+            required: %w[lesson],
+            additionalProperties: false,
+            properties: {
+              lesson: { "$ref" => "#/components/schemas/Lesson" }
+            }
+          },
+          Playback: {
+            type: :object,
+            required: %w[embed_url expires_at],
+            additionalProperties: false,
+            properties: {
+              embed_url: { type: :string, format: :uri },
+              expires_at: { type: :string, format: :"date-time" }
             }
           }
         }

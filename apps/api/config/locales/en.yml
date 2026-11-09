@@ -9,8 +9,10 @@ en:
     dashboard:
       content_languages: "Content languages"
       content_languages_hint: "Every course, module and lesson is managed separately per language. Missing translations will be flagged here."
-      next_steps: "Coming next"
-      next_steps_hint: "Courses, modules, lessons, instructors, students, subscriptions and video assets will be managed from this dashboard."
+      catalog: "Catalog"
+      published_courses: "Published courses"
+      lessons_missing_es: "Lessons missing Spanish"
+      lessons_missing_en: "Lessons missing English"
   api:
     errors:
       not_found: "The requested resource was not found."
@@ -19,3 +21,7 @@ en:
       bad_request: "The request is missing required parameters."
       unprocessable: "The request could not be processed."
       internal: "Something went wrong. Please try again."
+      rate_limited: "Too many attempts. Please try again later."
+      google_unavailable: "Google sign-in is not configured."
+      google_conflict: "This Google account cannot be linked."
+      playback_unavailable: "This lesson is not ready to play yet."

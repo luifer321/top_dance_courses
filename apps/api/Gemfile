@@ -37,6 +37,8 @@ gem "dartsass-sprockets"
 gem "devise", "~> 5.0"
 gem "devise-i18n"
 gem "pundit", "~> 2.5"
+gem "googleauth", "~> 1.11"
+gem "jwt", "~> 2.10"
 
 # Cross-origin requests from the web and mobile apps
 gem "rack-cors"
