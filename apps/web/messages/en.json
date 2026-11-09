@@ -94,14 +94,24 @@
     "detailPlaceholder": "This course's information will be loaded from the API.",
     "modules": "Modules",
     "lessons": "Lessons",
-    "instructor": "Instructor"
+    "instructor": "Instructor",
+    "notFound": "This course is not available.",
+    "loadError": "Could not load this course.",
+    "level": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
   },
   "lessons": {
     "playerTitle": "Lesson player",
     "playerPlaceholder": "The video player will connect to Bunny Stream.",
     "previous": "Previous lesson",
     "next": "Next lesson",
-    "markComplete": "Mark as complete"
+    "markComplete": "Mark as complete",
+    "notFound": "This lesson is not available.",
+    "signInToWatch": "Log in to watch this lesson.",
+    "playbackUnavailable": "Playback is not configured for this lesson yet."
   },
   "subscriptions": {
     "title": "Membership",

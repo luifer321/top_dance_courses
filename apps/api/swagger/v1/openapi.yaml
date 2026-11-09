@@ -242,6 +242,48 @@ paths:
                   type: string
                 password:
                   type: string
+  "/api/v1/courses":
+    get:
+      summary: Published course catalog
+      tags:
+      - Courses
+      operationId: listCourses
+      parameters:
+      - "$ref": "#/components/parameters/locale"
+      responses:
+        '200':
+          description: published courses
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CourseList"
+  "/api/v1/courses/{slug}":
+    parameters:
+    - name: slug
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Published course
+      tags:
+      - Courses
+      operationId: getCourse
+      parameters:
+      - "$ref": "#/components/parameters/locale"
+      responses:
+        '200':
+          description: course with modules and lessons
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CourseDetail"
+        '404':
+          description: unknown or unpublished course
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
   "/api/v1/health":
     get:
       summary: Readiness check
@@ -255,6 +297,81 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Health"
+  "/api/v1/courses/{slug}/lessons/{lesson_slug}/playback":
+    parameters:
+    - name: slug
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: lesson_slug
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Signed Bunny embed URL
+      tags:
+      - Courses
+      operationId: getLessonPlayback
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: signed embed
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Playback"
+        '401':
+          description: signed out
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+        '422':
+          description: playback not configured
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+  "/api/v1/courses/{slug}/lessons/{lesson_slug}":
+    parameters:
+    - name: slug
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: lesson_slug
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Published lesson
+      tags:
+      - Courses
+      operationId: getLesson
+      parameters:
+      - "$ref": "#/components/parameters/locale"
+      responses:
+        '200':
+          description: lesson details
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LessonDetail"
+        '404':
+          description: unpublished lesson
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
   "/api/v1/locales":
     get:
       summary: Supported interface languages
@@ -482,3 +599,207 @@ components:
       properties:
         ok:
           type: boolean
+    AvailableLanguages:
+      type: object
+      required:
+      - text
+      - audio
+      - subtitles
+      additionalProperties: false
+      properties:
+        text:
+          type: array
+          items:
+            "$ref": "#/components/schemas/LocaleCode"
+        audio:
+          type: array
+          items:
+            "$ref": "#/components/schemas/LocaleCode"
+        subtitles:
+          type: array
+          items:
+            "$ref": "#/components/schemas/LocaleCode"
+    CourseSummary:
+      type: object
+      required:
+      - slug
+      - original_language
+      - requested_locale
+      - content_locale
+      - title
+      - available_languages
+      additionalProperties: false
+      properties:
+        slug:
+          type: string
+        level:
+          type: string
+          nullable: true
+          enum:
+          - beginner
+          - intermediate
+          - advanced
+        original_language:
+          "$ref": "#/components/schemas/LocaleCode"
+        requested_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        content_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        available_languages:
+          "$ref": "#/components/schemas/AvailableLanguages"
+    CourseLessonSummary:
+      type: object
+      required:
+      - slug
+      - title
+      - content_locale
+      additionalProperties: false
+      properties:
+        slug:
+          type: string
+        title:
+          type: string
+        duration_seconds:
+          type: integer
+          nullable: true
+        content_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+    CourseModule:
+      type: object
+      required:
+      - position
+      - title
+      - content_locale
+      - lessons
+      additionalProperties: false
+      properties:
+        position:
+          type: integer
+        title:
+          type: string
+        content_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        lessons:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CourseLessonSummary"
+    Course:
+      type: object
+      required:
+      - slug
+      - original_language
+      - requested_locale
+      - content_locale
+      - title
+      - available_languages
+      - modules
+      additionalProperties: false
+      properties:
+        slug:
+          type: string
+        level:
+          type: string
+          nullable: true
+          enum:
+          - beginner
+          - intermediate
+          - advanced
+        original_language:
+          "$ref": "#/components/schemas/LocaleCode"
+        requested_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        content_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        available_languages:
+          "$ref": "#/components/schemas/AvailableLanguages"
+        modules:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CourseModule"
+    CourseList:
+      type: object
+      required:
+      - courses
+      additionalProperties: false
+      properties:
+        courses:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CourseSummary"
+    CourseDetail:
+      type: object
+      required:
+      - course
+      additionalProperties: false
+      properties:
+        course:
+          "$ref": "#/components/schemas/Course"
+    Lesson:
+      type: object
+      required:
+      - slug
+      - title
+      - content_locale
+      - course_slug
+      - original_language
+      - requested_locale
+      - available_languages
+      additionalProperties: false
+      properties:
+        slug:
+          type: string
+        title:
+          type: string
+        duration_seconds:
+          type: integer
+          nullable: true
+        content_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        course_slug:
+          type: string
+        description:
+          type: string
+          nullable: true
+        original_language:
+          "$ref": "#/components/schemas/LocaleCode"
+        requested_locale:
+          "$ref": "#/components/schemas/LocaleCode"
+        available_languages:
+          "$ref": "#/components/schemas/AvailableLanguages"
+        previous_slug:
+          type: string
+          nullable: true
+        next_slug:
+          type: string
+          nullable: true
+    LessonDetail:
+      type: object
+      required:
+      - lesson
+      additionalProperties: false
+      properties:
+        lesson:
+          "$ref": "#/components/schemas/Lesson"
+    Playback:
+      type: object
+      required:
+      - embed_url
+      - expires_at
+      additionalProperties: false
+      properties:
+        embed_url:
+          type: string
+          format: uri
+        expires_at:
+          type: string
+          format: date-time

@@ -24,6 +24,17 @@ Rails.application.routes.draw do
       end
 
       resource :me, only: %i[show update], controller: "me"
+
+      resources :courses, param: :slug, only: %i[index show] do
+        resources :lessons, param: :lesson_slug, only: :show
+      end
+      get "courses/:course_slug/lessons/:lesson_slug/playback",
+          to: "lesson_playbacks#show",
+          as: :course_lesson_playback
+
+      namespace :webhooks do
+        post "bunny", to: "bunny#create"
+      end
     end
   end
 

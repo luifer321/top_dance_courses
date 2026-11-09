@@ -9,8 +9,10 @@ es:
     dashboard:
       content_languages: "Idiomas del contenido"
       content_languages_hint: "Cada curso, módulo y lección se gestiona por separado en cada idioma. Las traducciones faltantes se señalarán aquí."
-      next_steps: "Próximamente"
-      next_steps_hint: "Desde este panel se gestionarán cursos, módulos, lecciones, instructores, estudiantes, suscripciones y videos."
+      catalog: "Catálogo"
+      published_courses: "Cursos publicados"
+      lessons_missing_es: "Lecciones sin español"
+      lessons_missing_en: "Lecciones sin inglés"
   api:
     errors:
       not_found: "No se encontró el recurso solicitado."
@@ -22,3 +24,4 @@ es:
       rate_limited: "Demasiados intentos. Inténtalo de nuevo más tarde."
       google_unavailable: "El inicio de sesión con Google no está configurado."
       google_conflict: "No se puede vincular esta cuenta de Google."
+      playback_unavailable: "Esta lección todavía no se puede reproducir."

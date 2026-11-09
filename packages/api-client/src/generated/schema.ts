@@ -140,6 +140,42 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/courses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Published course catalog */
+        get: operations["listCourses"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/courses/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        /** Published course */
+        get: operations["getCourse"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/health": {
         parameters: {
             query?: never;
@@ -149,6 +185,46 @@ export interface paths {
         };
         /** Readiness check */
         get: operations["getHealth"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/courses/{slug}/lessons/{lesson_slug}/playback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+                lesson_slug: string;
+            };
+            cookie?: never;
+        };
+        /** Signed Bunny embed URL */
+        get: operations["getLessonPlayback"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/courses/{slug}/lessons/{lesson_slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+                lesson_slug: string;
+            };
+            cookie?: never;
+        };
+        /** Published lesson */
+        get: operations["getLesson"];
         put?: never;
         post?: never;
         delete?: never;
@@ -240,6 +316,74 @@ export interface components {
         };
         Ok: {
             ok: boolean;
+        };
+        AvailableLanguages: {
+            text: components["schemas"]["LocaleCode"][];
+            audio: components["schemas"]["LocaleCode"][];
+            subtitles: components["schemas"]["LocaleCode"][];
+        };
+        CourseSummary: {
+            slug: string;
+            /** @enum {string|null} */
+            level?: "beginner" | "intermediate" | "advanced" | null;
+            original_language: components["schemas"]["LocaleCode"];
+            requested_locale: components["schemas"]["LocaleCode"];
+            content_locale: components["schemas"]["LocaleCode"];
+            title: string;
+            description?: string | null;
+            available_languages: components["schemas"]["AvailableLanguages"];
+        };
+        CourseLessonSummary: {
+            slug: string;
+            title: string;
+            duration_seconds?: number | null;
+            content_locale: components["schemas"]["LocaleCode"];
+        };
+        CourseModule: {
+            position: number;
+            title: string;
+            content_locale: components["schemas"]["LocaleCode"];
+            lessons: components["schemas"]["CourseLessonSummary"][];
+        };
+        Course: {
+            slug: string;
+            /** @enum {string|null} */
+            level?: "beginner" | "intermediate" | "advanced" | null;
+            original_language: components["schemas"]["LocaleCode"];
+            requested_locale: components["schemas"]["LocaleCode"];
+            content_locale: components["schemas"]["LocaleCode"];
+            title: string;
+            description?: string | null;
+            available_languages: components["schemas"]["AvailableLanguages"];
+            modules: components["schemas"]["CourseModule"][];
+        };
+        CourseList: {
+            courses: components["schemas"]["CourseSummary"][];
+        };
+        CourseDetail: {
+            course: components["schemas"]["Course"];
+        };
+        Lesson: {
+            slug: string;
+            title: string;
+            duration_seconds?: number | null;
+            content_locale: components["schemas"]["LocaleCode"];
+            course_slug: string;
+            description?: string | null;
+            original_language: components["schemas"]["LocaleCode"];
+            requested_locale: components["schemas"]["LocaleCode"];
+            available_languages: components["schemas"]["AvailableLanguages"];
+            previous_slug?: string | null;
+            next_slug?: string | null;
+        };
+        LessonDetail: {
+            lesson: components["schemas"]["Lesson"];
+        };
+        Playback: {
+            /** Format: uri */
+            embed_url: string;
+            /** Format: date-time */
+            expires_at: string;
         };
     };
     responses: never;
@@ -542,6 +686,63 @@ export interface operations {
             };
         };
     };
+    listCourses: {
+        parameters: {
+            query?: {
+                /** @description Interface language for messages (overrides Accept-Language). */
+                locale?: components["parameters"]["locale"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description published courses */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourseList"];
+                };
+            };
+        };
+    };
+    getCourse: {
+        parameters: {
+            query?: {
+                /** @description Interface language for messages (overrides Accept-Language). */
+                locale?: components["parameters"]["locale"];
+            };
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description course with modules and lessons */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourseDetail"];
+                };
+            };
+            /** @description unknown or unpublished course */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
     getHealth: {
         parameters: {
             query?: never;
@@ -558,6 +759,86 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Health"];
+                };
+            };
+        };
+    };
+    getLessonPlayback: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+                Authorization?: string;
+            };
+            path: {
+                slug: string;
+                lesson_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description signed embed */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Playback"];
+                };
+            };
+            /** @description signed out */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+            /** @description playback not configured */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    getLesson: {
+        parameters: {
+            query?: {
+                /** @description Interface language for messages (overrides Accept-Language). */
+                locale?: components["parameters"]["locale"];
+            };
+            header?: never;
+            path: {
+                slug: string;
+                lesson_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description lesson details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LessonDetail"];
+                };
+            };
+            /** @description unpublished lesson */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
                 };
             };
         };

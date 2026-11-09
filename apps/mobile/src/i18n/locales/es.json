@@ -46,7 +46,29 @@
   "courses": {
     "title": "Cursos",
     "subtitle": "Explora el catálogo de Top Dance.",
-    "emptyCatalog": "El catálogo estará disponible muy pronto."
+    "emptyCatalog": "El catálogo estará disponible muy pronto.",
+    "detailTitle": "Detalles del curso",
+    "detailPlaceholder": "La información de este curso se cargará desde la API.",
+    "modules": "Módulos",
+    "lessons": "Lecciones",
+    "instructor": "Instructor",
+    "notFound": "Este curso no está disponible.",
+    "loadError": "No se pudo cargar este curso.",
+    "level": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzado"
+    }
+  },
+  "lessons": {
+    "playerTitle": "Reproductor de lección",
+    "playerPlaceholder": "El reproductor de video se conectará con Bunny Stream.",
+    "previous": "Lección anterior",
+    "next": "Siguiente lección",
+    "markComplete": "Marcar como completada",
+    "notFound": "Esta lección no está disponible.",
+    "signInToWatch": "Inicia sesión para ver esta lección.",
+    "playbackUnavailable": "La reproducción de esta lección todavía no está configurada."
   },
   "auth": {
     "loginTitle": "Bienvenido de nuevo",

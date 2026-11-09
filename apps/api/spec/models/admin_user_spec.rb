@@ -10,4 +10,9 @@ RSpec.describe AdminUser, type: :model do
     expect(admin).not_to be_valid
     expect(admin.errors[:password]).to be_present
   end
+
+  it "allowlists searchable attributes and no associations for Ransack" do
+    expect(described_class.ransackable_attributes).to eq(%w[id email created_at updated_at])
+    expect(described_class.ransackable_associations).to eq([])
+  end
 end

@@ -39,6 +39,8 @@ export default function RootLayout() {
       <AuthProvider>
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
           <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="course/[slug]" options={{ headerShown: true, title: "" }} />
+          <Stack.Screen name="lesson/[courseSlug]/[lessonSlug]" options={{ headerShown: true, title: "" }} />
           <Stack.Screen name="login" />
           <Stack.Screen name="register" />
           <Stack.Screen name="forgot-password" />
