@@ -1,13 +1,16 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { useMe } from "@/features/auth/use-me";
-import { LanguageAvailability } from "@/features/courses/language-availability";
+import { useSetLocaleAlternates } from "@/features/i18n/locale-alternates";
+import { lessonLocaleHrefs } from "@/lib/locale-hrefs";
 import { Link } from "@/i18n/navigation";
 import { api } from "@/lib/api";
 import { useRouteParams } from "@/lib/use-route-params";
+import { useWatchProgress } from "./use-watch-progress";
 
 export function LessonPlayerClient() {
   const t = useTranslations("lessons");
@@ -45,6 +48,21 @@ export function LessonPlayerClient() {
     },
   });
 
+  const playback = playbackQuery.data;
+  const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null);
+  useWatchProgress(
+    iframe,
+    slug,
+    lessonSlug,
+    playback?.kind === "ready" && Boolean(playback.embed_url),
+  );
+  const loadedLesson = lessonQuery.data?.lesson;
+  useSetLocaleAlternates(
+    loadedLesson
+      ? lessonLocaleHrefs(loadedLesson.localized_slugs, loadedLesson.localized_lesson_slugs)
+      : null,
+  );
+
   if (!slug || !lessonSlug || lessonQuery.isLoading || authLoading) {
     return <p className="text-muted-foreground">{tCommon("loading")}</p>;
   }
@@ -53,8 +71,6 @@ export function LessonPlayerClient() {
   if (!lesson) {
     return <p className="text-muted-foreground">{t("notFound")}</p>;
   }
-
-  const playback = playbackQuery.data;
   const lessonHref = (targetSlug: string) =>
     ({
       pathname: "/courses/[slug]/lessons/[lessonSlug]" as const,
@@ -64,16 +80,9 @@ export function LessonPlayerClient() {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h2 className="text-2xl font-semibold">{lesson.title}</h2>
+        <h1 className="text-3xl font-semibold tracking-tight">{lesson.title}</h1>
+        {lesson.subtitle ? <p className="mt-2 max-w-2xl text-lg text-muted-foreground">{lesson.subtitle}</p> : null}
         {lesson.description ? <p className="mt-2 max-w-2xl text-muted-foreground">{lesson.description}</p> : null}
-        <div className="mt-3">
-          <LanguageAvailability
-            requestedLocale={lesson.requested_locale}
-            contentLocale={lesson.content_locale}
-            availableLanguages={lesson.available_languages}
-            originalLanguage={lesson.original_language}
-          />
-        </div>
       </div>
 
       <div className="flex aspect-video items-center justify-center overflow-hidden rounded-xl border bg-card shadow-glow-sm">
@@ -88,6 +97,7 @@ export function LessonPlayerClient() {
           <p className="text-muted-foreground">{tCommon("loading")}</p>
         ) : playback?.kind === "ready" && playback.embed_url ? (
           <iframe
+            ref={setIframe}
             title={lesson.title}
             src={playback.embed_url}
             className="size-full border-0"

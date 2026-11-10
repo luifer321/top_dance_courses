@@ -2,7 +2,10 @@
   "metadata": {
     "title": "Top Dance",
     "titleTemplate": "%s · Top Dance",
-    "description": "Aprende salsa, bachata, técnica, musicalidad y coreografía con cursos en video de Top Dance."
+    "description": "Aprende salsa, bachata, técnica, musicalidad y coreografía con cursos en video de Top Dance.",
+    "homeTitle": "Academia de baile online | Top Dance",
+    "coursesTitle": "Cursos de baile online | Top Dance",
+    "coursesDescription": "Aprende salsa, bachata y más con los cursos online de Top Dance."
   },
   "common": {
     "appName": "Top Dance",
@@ -16,13 +19,6 @@
       "change": "Cambiar idioma",
       "es": "Español",
       "en": "English"
-    },
-    "contentLanguages": {
-      "available": "Idiomas disponibles",
-      "original": "Idioma original",
-      "audio": "Audio",
-      "subtitles": "Subtítulos",
-      "notAvailableInLocale": "Este contenido aún no está disponible en español."
     }
   },
   "navigation": {
@@ -84,19 +80,34 @@
     "title": "Mi panel",
     "subtitle": "Tu progreso y tus cursos en un solo lugar.",
     "continueLearning": "Continuar aprendiendo",
-    "emptyProgress": "Cuando empieces un curso, tu progreso aparecerá aquí."
+    "emptyProgress": "Cuando empieces un curso, tu progreso aparecerá aquí.",
+    "signInHint": "Inicia sesión para guardar tu progreso."
   },
   "courses": {
     "title": "Cursos",
     "subtitle": "Explora el catálogo de Top Dance.",
-    "emptyCatalog": "El catálogo estará disponible muy pronto.",
+    "emptyCatalog": "Aún no hay cursos disponibles en español.",
     "detailTitle": "Detalles del curso",
     "detailPlaceholder": "La información de este curso se cargará desde la API.",
     "modules": "Módulos",
     "lessons": "Lecciones",
+    "curriculum": "Temario",
     "instructor": "Instructor",
     "notFound": "Este curso no está disponible.",
     "loadError": "No se pudo cargar este curso.",
+    "lessonCount": "{count, plural, one {# lección} other {# lecciones}}",
+    "durationMinutes": "{count} min",
+    "coverAlt": "Imagen de portada de {title}",
+    "thumbnailAlt": "Miniatura de {title}",
+    "openLesson": "Abrir lección {title}",
+    "freePreview": "Vista previa",
+    "start": "Empezar",
+    "continue": "Continuar",
+    "notStarted": "Sin empezar",
+    "inProgress": "En curso",
+    "completed": "Completado",
+    "watched": "Vista",
+    "progressLessons": "{completed} de {count} lecciones",
     "level": {
       "beginner": "Principiante",
       "intermediate": "Intermedio",

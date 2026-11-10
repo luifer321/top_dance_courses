@@ -41,8 +41,8 @@ export function Eyebrow({ style, ...props }: TextProps) {
   return <Text style={[styles.eyebrow, style]} {...props} />;
 }
 
-export function Card({ children }: { children: ReactNode }) {
-  return <View style={styles.card}>{children}</View>;
+export function Card({ children, flush }: { children: ReactNode; flush?: boolean }) {
+  return <View style={[styles.card, flush && styles.cardFlush]}>{children}</View>;
 }
 
 export function Badge({ label }: { label: string }) {
@@ -112,7 +112,9 @@ const styles = StyleSheet.create({
     borderRadius: radius.xl,
     padding: spacing.lg,
     gap: spacing.sm,
+    overflow: "hidden",
   },
+  cardFlush: { padding: 0, gap: 0 },
   badge: {
     backgroundColor: colors.secondary,
     borderRadius: radius.full,

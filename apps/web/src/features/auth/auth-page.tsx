@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
 import { enablePageLocale, type LocalePageProps } from "@/i18n/page-locale";
-import { localizedMetadata } from "@/lib/metadata";
+import { pageMetadata } from "@/lib/metadata";
 import { AuthForm } from "./auth-form";
 import { ForgotPasswordForm } from "./password-forms";
 import { ResetPasswordPageClient } from "./reset-password-page";
@@ -108,24 +108,48 @@ export async function ResetPasswordPage({ params }: LocalePageProps) {
 
 export async function generateLoginMetadata({ params }: LocalePageProps) {
   const { locale } = await enablePageLocale(params);
-  const t = await getTranslations({ locale, namespace: "navigation" });
-  return localizedMetadata(locale, "/login", t("login"));
+  const t = await getTranslations({ locale, namespace: "auth" });
+  return pageMetadata({
+    locale,
+    title: `${t("loginTitle")} | Top Dance`,
+    description: t("loginSubtitle"),
+    href: "/login",
+    index: false,
+  });
 }
 
 export async function generateRegisterMetadata({ params }: LocalePageProps) {
   const { locale } = await enablePageLocale(params);
-  const t = await getTranslations({ locale, namespace: "navigation" });
-  return localizedMetadata(locale, "/register", t("register"));
+  const t = await getTranslations({ locale, namespace: "auth" });
+  return pageMetadata({
+    locale,
+    title: `${t("registerTitle")} | Top Dance`,
+    description: t("registerSubtitle"),
+    href: "/register",
+    index: false,
+  });
 }
 
 export async function generateForgotPasswordMetadata({ params }: LocalePageProps) {
   const { locale } = await enablePageLocale(params);
   const t = await getTranslations({ locale, namespace: "auth" });
-  return localizedMetadata(locale, "/forgot-password", t("forgotTitle"));
+  return pageMetadata({
+    locale,
+    title: `${t("forgotTitle")} | Top Dance`,
+    description: t("forgotSubtitle"),
+    href: "/forgot-password",
+    index: false,
+  });
 }
 
 export async function generateResetPasswordMetadata({ params }: LocalePageProps) {
   const { locale } = await enablePageLocale(params);
   const t = await getTranslations({ locale, namespace: "auth" });
-  return { ...(await localizedMetadata(locale, "/reset-password", t("resetTitle"))), robots: { index: false } };
+  return pageMetadata({
+    locale,
+    title: `${t("resetTitle")} | Top Dance`,
+    description: t("resetSubtitle"),
+    href: "/reset-password",
+    index: false,
+  });
 }

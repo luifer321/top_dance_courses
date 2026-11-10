@@ -8,22 +8,21 @@ RSpec.describe Course, type: :model do
     expect(described_class.ransackable_associations).to include("translations")
   end
 
-  it "cannot be published without a published original-language title" do
+  it "cannot be published without a published translation title" do
     course = build(:course, status: "published")
     expect(course).not_to be_valid
     expect(course.errors[:status]).to be_present
   end
 
-  it "publishes when the original language translation is published" do
+  it "publishes when a translation is published" do
     course = create(:course, :published)
     expect(course).to be_visible_to_students
   end
 
-  it "falls back to the original language for student copy" do
+  it "does not substitute another language when that translation is unpublished" do
     course = create(:course, :published)
-    translation = course.published_translation_for("en")
-    expect(translation.locale).to eq("es")
-    expect(translation.title).to eq("Salsa básica")
+    expect(course.published_translation_for("en")).to be_nil
+    expect(course.published_translation_for("es").title).to eq("Salsa básica")
   end
 
   it "lists courses missing a translation locale" do

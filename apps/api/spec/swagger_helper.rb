@@ -146,30 +146,58 @@ RSpec.configure do |config|
               subtitles: { type: :array, items: { "$ref" => "#/components/schemas/LocaleCode" } }
             }
           },
+          CourseProgress: {
+            type: :object,
+            required: %w[completed_lessons lesson_count percent],
+            additionalProperties: false,
+            properties: {
+              completed_lessons: { type: :integer },
+              lesson_count: { type: :integer },
+              percent: { type: :integer }
+            }
+          },
           CourseSummary: {
             type: :object,
-            required: %w[slug original_language requested_locale content_locale title available_languages],
+            required: %w[slug localized_slugs category requested_locale content_locale title lesson_count available_languages progress],
             additionalProperties: false,
             properties: {
               slug: { type: :string },
+              localized_slugs: { type: :object, additionalProperties: { type: :string } },
               level: { type: :string, nullable: true, enum: %w[beginner intermediate advanced] },
-              original_language: { "$ref" => "#/components/schemas/LocaleCode" },
+              category: { oneOf: [ { "$ref" => "#/components/schemas/CourseCategory" }, { type: :null } ] },
               requested_locale: { "$ref" => "#/components/schemas/LocaleCode" },
               content_locale: { "$ref" => "#/components/schemas/LocaleCode" },
               title: { type: :string },
               description: { type: :string, nullable: true },
-              available_languages: { "$ref" => "#/components/schemas/AvailableLanguages" }
+              cover_image_url: { type: :string, nullable: true },
+              lesson_count: { type: :integer },
+              duration_seconds: { type: :integer, nullable: true },
+              available_languages: { "$ref" => "#/components/schemas/AvailableLanguages" },
+              progress: { oneOf: [ { "$ref" => "#/components/schemas/CourseProgress" }, { type: :null } ] }
+            }
+          },
+          CourseCategory: {
+            type: :object,
+            required: %w[slug name],
+            additionalProperties: false,
+            properties: {
+              slug: { type: :string },
+              name: { type: :string }
             }
           },
           CourseLessonSummary: {
             type: :object,
-            required: %w[slug title content_locale],
+            required: %w[slug title content_locale free_preview completed],
             additionalProperties: false,
             properties: {
               slug: { type: :string },
               title: { type: :string },
+              subtitle: { type: :string, nullable: true },
               duration_seconds: { type: :integer, nullable: true },
-              content_locale: { "$ref" => "#/components/schemas/LocaleCode" }
+              thumbnail_url: { type: :string, nullable: true },
+              free_preview: { type: :boolean },
+              content_locale: { "$ref" => "#/components/schemas/LocaleCode" },
+              completed: { type: :boolean }
             }
           },
           CourseModule: {
@@ -185,17 +213,22 @@ RSpec.configure do |config|
           },
           Course: {
             type: :object,
-            required: %w[slug original_language requested_locale content_locale title available_languages modules],
+            required: %w[slug localized_slugs category requested_locale content_locale title lesson_count available_languages progress modules],
             additionalProperties: false,
             properties: {
               slug: { type: :string },
+              localized_slugs: { type: :object, additionalProperties: { type: :string } },
               level: { type: :string, nullable: true, enum: %w[beginner intermediate advanced] },
-              original_language: { "$ref" => "#/components/schemas/LocaleCode" },
+              category: { oneOf: [ { "$ref" => "#/components/schemas/CourseCategory" }, { type: :null } ] },
               requested_locale: { "$ref" => "#/components/schemas/LocaleCode" },
               content_locale: { "$ref" => "#/components/schemas/LocaleCode" },
               title: { type: :string },
               description: { type: :string, nullable: true },
+              cover_image_url: { type: :string, nullable: true },
+              lesson_count: { type: :integer },
+              duration_seconds: { type: :integer, nullable: true },
               available_languages: { "$ref" => "#/components/schemas/AvailableLanguages" },
+              progress: { oneOf: [ { "$ref" => "#/components/schemas/CourseProgress" }, { type: :null } ] },
               modules: { type: :array, items: { "$ref" => "#/components/schemas/CourseModule" } }
             }
           },
@@ -217,16 +250,21 @@ RSpec.configure do |config|
           },
           Lesson: {
             type: :object,
-            required: %w[slug title content_locale course_slug original_language requested_locale available_languages],
+            required: %w[slug title content_locale free_preview completed course_slug localized_slugs localized_lesson_slugs requested_locale available_languages],
             additionalProperties: false,
             properties: {
               slug: { type: :string },
               title: { type: :string },
+              subtitle: { type: :string, nullable: true },
               duration_seconds: { type: :integer, nullable: true },
+              thumbnail_url: { type: :string, nullable: true },
+              free_preview: { type: :boolean },
               content_locale: { "$ref" => "#/components/schemas/LocaleCode" },
+              completed: { type: :boolean },
               course_slug: { type: :string },
+              localized_slugs: { type: :object, additionalProperties: { type: :string } },
+              localized_lesson_slugs: { type: :object, additionalProperties: { type: :string } },
               description: { type: :string, nullable: true },
-              original_language: { "$ref" => "#/components/schemas/LocaleCode" },
               requested_locale: { "$ref" => "#/components/schemas/LocaleCode" },
               available_languages: { "$ref" => "#/components/schemas/AvailableLanguages" },
               previous_slug: { type: :string, nullable: true },
@@ -248,6 +286,23 @@ RSpec.configure do |config|
             properties: {
               embed_url: { type: :string, format: :uri },
               expires_at: { type: :string, format: :"date-time" }
+            }
+          },
+          LessonProgress: {
+            type: :object,
+            required: %w[position_seconds completed],
+            additionalProperties: false,
+            properties: {
+              position_seconds: { type: :integer },
+              completed: { type: :boolean }
+            }
+          },
+          LessonProgressResult: {
+            type: :object,
+            required: %w[progress],
+            additionalProperties: false,
+            properties: {
+              progress: { "$ref" => "#/components/schemas/LessonProgress" }
             }
           }
         }

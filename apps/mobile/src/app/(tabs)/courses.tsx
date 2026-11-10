@@ -1,19 +1,25 @@
+import { Image } from "expo-image";
 import { useRouter, type Href } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
 
 import { Body, Card, Screen, Title } from "@/components/ui";
 import { api } from "@/lib/api";
-import { courseLevelKey, requestLocale } from "@/lib/catalog";
+import { courseLevelKey, durationMinutes, mediaUrl, requestLocale } from "@/lib/catalog";
+import { colors, spacing } from "@/theme/tokens";
 
 type CourseSummary = {
   slug: string;
   title: string;
   description?: string | null;
+  category?: { slug: string; name: string } | null;
   level?: string | null;
   requested_locale: string;
   content_locale: string;
+  cover_image_url?: string | null;
+  lesson_count?: number;
+  duration_seconds?: number | null;
 };
 
 export default function CoursesScreen() {
@@ -55,19 +61,38 @@ export default function CoursesScreen() {
       ) : null}
       {courses.map((course) => {
         const level = courseLevelKey(course.level);
+        const minutes = durationMinutes(course.duration_seconds);
+        const cover = mediaUrl(course.cover_image_url);
         return (
           <Pressable
             key={course.slug}
             accessibilityRole="button"
             onPress={() => router.push(`/course/${course.slug}` as Href)}
           >
-            <Card>
-              <Body>{course.title}</Body>
-              {level ? <Body muted>{t(`courses.level.${level}`)}</Body> : null}
-              {course.description ? <Body muted>{course.description}</Body> : null}
-              {course.requested_locale !== course.content_locale ? (
-                <Body muted>{t("common.contentLanguages.notAvailableInLocale")}</Body>
+            <Card flush>
+              {cover ? (
+                <Image
+                  source={{ uri: cover }}
+                  style={{ width: "100%", aspectRatio: 16 / 9, backgroundColor: colors.secondary }}
+                  contentFit="cover"
+                  accessibilityLabel={t("courses.coverAlt", { title: course.title })}
+                />
               ) : null}
+              <View style={{ padding: spacing.lg, gap: spacing.sm }}>
+                <Body>{course.title}</Body>
+                {course.category?.name ? <Body>{course.category.name}</Body> : null}
+                {level ? <Body muted>{t(`courses.level.${level}`)}</Body> : null}
+                {course.lesson_count != null ? (
+                  <Body muted>
+                    {t("courses.lessonCount", { count: course.lesson_count })}
+                    {minutes ? ` · ${t("courses.durationMinutes", { count: minutes })}` : null}
+                  </Body>
+                ) : null}
+                {course.description ? <Body muted>{course.description}</Body> : null}
+                {course.requested_locale !== course.content_locale ? (
+                  <Body muted>{t("common.contentLanguages.notAvailableInLocale")}</Body>
+                ) : null}
+              </View>
             </Card>
           </Pressable>
         );

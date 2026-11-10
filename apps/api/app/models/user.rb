@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   has_many :identities, class_name: "UserIdentity", dependent: :destroy
   has_many :refresh_tokens, dependent: :destroy
+  has_many :lesson_progresses, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 100 }
   validates :preferred_locale, inclusion: { in: I18n.available_locales.map(&:to_s) }

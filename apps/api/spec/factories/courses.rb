@@ -3,7 +3,6 @@
 FactoryBot.define do
   factory :course do
     sequence(:slug) { |n| "salsa-basics-#{n}" }
-    original_language { "es" }
     level { "beginner" }
     status { "draft" }
 
@@ -12,12 +11,12 @@ FactoryBot.define do
       published_at { Time.current }
 
       after(:build) do |course|
-        translation = course.translations.detect { |row| row.locale == course.original_language }
+        translation = course.translations.detect { |row| row.locale == "es" }
         if translation
           translation.status = "published"
           translation.title = "Salsa básica" if translation.title.blank?
         else
-          course.translations << build(:course_translation, :published, course: course, locale: course.original_language)
+          course.translations << build(:course_translation, :published, course: course, locale: "es")
         end
       end
     end
@@ -71,7 +70,7 @@ FactoryBot.define do
 
     trait :published do
       after(:build) do |lesson|
-        locale = lesson.course&.original_language || "es"
+        locale = "es"
         translation = lesson.translations.detect { |row| row.locale == locale }
         if translation
           translation.status = "published"
@@ -87,6 +86,7 @@ FactoryBot.define do
     lesson
     locale { "es" }
     title { "Paso básico" }
+    subtitle { locale.to_s == "es" ? "Técnica, peso y ritmo del primer paso." : nil }
     description { "El primer paso." }
     status { "draft" }
 

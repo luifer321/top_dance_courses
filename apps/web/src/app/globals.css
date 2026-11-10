@@ -221,6 +221,15 @@
   letter-spacing: 1px;
 }
 
+.logo-lockup-sm .logo-top {
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+}
+
+.logo-lockup-sm .logo-dance {
+  font-size: 1.15rem;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

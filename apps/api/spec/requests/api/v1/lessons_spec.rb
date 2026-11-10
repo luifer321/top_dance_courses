@@ -38,4 +38,33 @@ RSpec.describe "API v1 lessons", type: :request do
       end
     end
   end
+
+  it "resolves a published lesson translation slug and keeps the stable slug" do
+    course = create_published_catalog_course
+    course.translations.create!(
+      locale: "en",
+      title: "Basic salsa",
+      description: "Learn the basic step.",
+      status: "published",
+      slug: "basic-salsa"
+    )
+    lesson = course.lessons.first
+    lesson.translation_for("es").update!(slug: "paso-basico-es")
+    lesson.translations.create!(
+      locale: "en",
+      title: "Basic step",
+      description: "The first step.",
+      status: "published",
+      slug: "basic-step"
+    )
+
+    get "/api/v1/courses/salsa-basics/lessons/basic-step", params: { locale: "en" }
+    english = response.parsed_body["lesson"]
+    expect(english["slug"]).to eq("basic-step")
+    expect(english["localized_lesson_slugs"]).to eq("es" => "paso-basico-es", "en" => "basic-step")
+
+    get "/api/v1/courses/salsa-basics/lessons/paso-basico", params: { locale: "es" }
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body["lesson"]["slug"]).to eq("paso-basico-es")
+  end
 end

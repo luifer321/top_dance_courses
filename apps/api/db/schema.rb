@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_09_020000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_10_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -28,6 +28,34 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_020000) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource"
   end
 
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -40,6 +68,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_020000) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
+  create_table "categories", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_categories_on_slug", unique: true
+  end
+
+  create_table "category_translations", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.string "locale", null: false
+    t.string "name", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id", "locale"], name: "index_category_translations_on_category_and_locale", unique: true
+    t.index ["category_id"], name: "index_category_translations_on_category_id"
+    t.check_constraint "locale::text = ANY (ARRAY['es'::character varying, 'en'::character varying]::text[])", name: "category_translations_locale_check"
+  end
+
   create_table "course_module_translations", force: :cascade do |t|
     t.bigint "course_module_id", null: false
     t.string "locale", null: false
@@ -49,8 +96,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_020000) do
     t.datetime "updated_at", null: false
     t.index ["course_module_id", "locale"], name: "idx_module_translations_on_module_and_locale", unique: true
     t.index ["course_module_id"], name: "index_course_module_translations_on_course_module_id"
-    t.check_constraint "locale::text = ANY (ARRAY['es'::character varying, 'en'::character varying]::text[])", name: "course_module_translations_locale_check"
-    t.check_constraint "status::text = ANY (ARRAY['draft'::character varying, 'published'::character varying]::text[])", name: "course_module_translations_status_check"
+    t.check_constraint "locale::text = ANY (ARRAY['es'::character varying::text, 'en'::character varying::text])", name: "course_module_translations_locale_check"
+    t.check_constraint "status::text = ANY (ARRAY['draft'::character varying::text, 'published'::character varying::text])", name: "course_module_translations_status_check"
   end
 
   create_table "course_modules", force: :cascade do |t|
@@ -70,23 +117,39 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_020000) do
     t.string "status", default: "draft", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "slug"
     t.index ["course_id", "locale"], name: "index_course_translations_on_course_id_and_locale", unique: true
     t.index ["course_id"], name: "index_course_translations_on_course_id"
-    t.check_constraint "locale::text = ANY (ARRAY['es'::character varying, 'en'::character varying]::text[])", name: "course_translations_locale_check"
-    t.check_constraint "status::text = ANY (ARRAY['draft'::character varying, 'published'::character varying]::text[])", name: "course_translations_status_check"
+    t.index ["locale", "slug"], name: "index_course_translations_on_locale_and_slug", unique: true, where: "(slug IS NOT NULL)"
+    t.check_constraint "locale::text = ANY (ARRAY['es'::character varying::text, 'en'::character varying::text])", name: "course_translations_locale_check"
+    t.check_constraint "status::text = ANY (ARRAY['draft'::character varying::text, 'published'::character varying::text])", name: "course_translations_status_check"
   end
 
   create_table "courses", force: :cascade do |t|
     t.string "slug", null: false
-    t.string "original_language", default: "es", null: false
     t.string "level"
     t.string "status", default: "draft", null: false
     t.datetime "published_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "cover_image_url"
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_courses_on_category_id"
     t.index ["slug"], name: "index_courses_on_slug", unique: true
-    t.check_constraint "original_language::text = ANY (ARRAY['es'::character varying, 'en'::character varying]::text[])", name: "courses_original_language_check"
-    t.check_constraint "status::text = ANY (ARRAY['draft'::character varying, 'published'::character varying, 'archived'::character varying]::text[])", name: "courses_status_check"
+    t.check_constraint "status::text = ANY (ARRAY['draft'::character varying::text, 'published'::character varying::text, 'archived'::character varying::text])", name: "courses_status_check"
+  end
+
+  create_table "lesson_progresses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "lesson_id", null: false
+    t.integer "position_seconds", default: 0, null: false
+    t.datetime "completed_at"
+    t.datetime "last_watched_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lesson_id"], name: "index_lesson_progresses_on_lesson_id"
+    t.index ["user_id", "lesson_id"], name: "index_lesson_progresses_on_user_id_and_lesson_id", unique: true
+    t.index ["user_id"], name: "index_lesson_progresses_on_user_id"
   end
 
   create_table "lesson_translations", force: :cascade do |t|
@@ -97,10 +160,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_020000) do
     t.string "status", default: "draft", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "subtitle"
+    t.string "slug"
     t.index ["lesson_id", "locale"], name: "index_lesson_translations_on_lesson_id_and_locale", unique: true
     t.index ["lesson_id"], name: "index_lesson_translations_on_lesson_id"
-    t.check_constraint "locale::text = ANY (ARRAY['es'::character varying, 'en'::character varying]::text[])", name: "lesson_translations_locale_check"
-    t.check_constraint "status::text = ANY (ARRAY['draft'::character varying, 'published'::character varying]::text[])", name: "lesson_translations_status_check"
+    t.index ["locale", "slug"], name: "index_lesson_translations_on_locale_and_slug", where: "(slug IS NOT NULL)"
+    t.check_constraint "locale::text = ANY (ARRAY['es'::character varying::text, 'en'::character varying::text])", name: "lesson_translations_locale_check"
+    t.check_constraint "status::text = ANY (ARRAY['draft'::character varying::text, 'published'::character varying::text])", name: "lesson_translations_status_check"
   end
 
   create_table "lessons", force: :cascade do |t|
@@ -111,6 +177,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_020000) do
     t.boolean "free_preview", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "thumbnail_url"
     t.index ["course_module_id", "position"], name: "index_lessons_on_course_module_id_and_position"
     t.index ["course_module_id", "slug"], name: "index_lessons_on_course_module_id_and_slug", unique: true
     t.index ["course_module_id"], name: "index_lessons_on_course_module_id"
@@ -137,7 +204,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_020000) do
     t.datetime "updated_at", null: false
     t.index ["video_asset_id", "language"], name: "index_subtitle_tracks_on_video_asset_id_and_language", unique: true
     t.index ["video_asset_id"], name: "index_subtitle_tracks_on_video_asset_id"
-    t.check_constraint "language::text = ANY (ARRAY['es'::character varying, 'en'::character varying]::text[])", name: "subtitle_tracks_language_check"
+    t.check_constraint "language::text = ANY (ARRAY['es'::character varying::text, 'en'::character varying::text])", name: "subtitle_tracks_language_check"
   end
 
   create_table "user_identities", force: :cascade do |t|
@@ -177,14 +244,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_020000) do
     t.index ["lesson_id", "language", "kind"], name: "index_video_assets_on_lesson_id_and_language_and_kind", unique: true
     t.index ["lesson_id"], name: "index_video_assets_on_lesson_id"
     t.index ["provider_video_id"], name: "index_video_assets_on_provider_video_id"
-    t.check_constraint "kind::text = ANY (ARRAY['original'::character varying, 'dubbed'::character varying]::text[])", name: "video_assets_kind_check"
-    t.check_constraint "language::text = ANY (ARRAY['es'::character varying, 'en'::character varying]::text[])", name: "video_assets_language_check"
-    t.check_constraint "status::text = ANY (ARRAY['processing'::character varying, 'ready'::character varying, 'failed'::character varying]::text[])", name: "video_assets_status_check"
+    t.check_constraint "kind::text = ANY (ARRAY['original'::character varying::text, 'dubbed'::character varying::text])", name: "video_assets_kind_check"
+    t.check_constraint "language::text = ANY (ARRAY['es'::character varying::text, 'en'::character varying::text])", name: "video_assets_language_check"
+    t.check_constraint "status::text = ANY (ARRAY['processing'::character varying::text, 'ready'::character varying::text, 'failed'::character varying::text])", name: "video_assets_status_check"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "category_translations", "categories"
   add_foreign_key "course_module_translations", "course_modules"
   add_foreign_key "course_modules", "courses"
   add_foreign_key "course_translations", "courses"
+  add_foreign_key "courses", "categories"
+  add_foreign_key "lesson_progresses", "lessons"
+  add_foreign_key "lesson_progresses", "users"
   add_foreign_key "lesson_translations", "lessons"
   add_foreign_key "lessons", "course_modules"
   add_foreign_key "refresh_tokens", "users"

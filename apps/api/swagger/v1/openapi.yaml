@@ -340,6 +340,57 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Error"
+  "/api/v1/courses/{slug}/lessons/{lesson_slug}/progress":
+    parameters:
+    - name: slug
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: lesson_slug
+      in: path
+      required: true
+      schema:
+        type: string
+    post:
+      summary: Record how far a student has watched a lesson
+      tags:
+      - Courses
+      operationId: recordLessonProgress
+      parameters:
+      - "$ref": "#/components/parameters/authTransport"
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: progress saved
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LessonProgressResult"
+        '401':
+          description: signed out
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - position_seconds
+              properties:
+                position_seconds:
+                  type: integer
+                duration_seconds:
+                  type: integer
+                ended:
+                  type: boolean
   "/api/v1/courses/{slug}/lessons/{lesson_slug}":
     parameters:
     - name: slug
@@ -619,19 +670,52 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/LocaleCode"
-    CourseSummary:
+    CourseProgress:
+      type: object
+      required:
+      - completed_lessons
+      - lesson_count
+      - percent
+      additionalProperties: false
+      properties:
+        completed_lessons:
+          type: integer
+        lesson_count:
+          type: integer
+        percent:
+          type: integer
+    CourseCategory:
       type: object
       required:
       - slug
-      - original_language
-      - requested_locale
-      - content_locale
-      - title
-      - available_languages
+      - name
       additionalProperties: false
       properties:
         slug:
           type: string
+        name:
+          type: string
+    CourseSummary:
+      type: object
+      required:
+      - slug
+      - localized_slugs
+      - category
+      - requested_locale
+      - content_locale
+      - title
+      - lesson_count
+      - available_languages
+      - progress
+      additionalProperties: false
+      properties:
+        slug:
+          type: string
+        localized_slugs:
+          type: object
+          additionalProperties:
+            type: string
+          description: Public URL slug for each published translation.
         level:
           type: string
           nullable: true
@@ -639,8 +723,10 @@ components:
           - beginner
           - intermediate
           - advanced
-        original_language:
-          "$ref": "#/components/schemas/LocaleCode"
+        category:
+          oneOf:
+          - "$ref": "#/components/schemas/CourseCategory"
+          - type: "null"
         requested_locale:
           "$ref": "#/components/schemas/LocaleCode"
         content_locale:
@@ -650,25 +736,49 @@ components:
         description:
           type: string
           nullable: true
+        cover_image_url:
+          type: string
+          nullable: true
+        lesson_count:
+          type: integer
+        duration_seconds:
+          type: integer
+          nullable: true
         available_languages:
           "$ref": "#/components/schemas/AvailableLanguages"
+        progress:
+          oneOf:
+          - "$ref": "#/components/schemas/CourseProgress"
+          - type: 'null'
     CourseLessonSummary:
       type: object
       required:
       - slug
       - title
       - content_locale
+      - free_preview
+      - completed
       additionalProperties: false
       properties:
         slug:
           type: string
         title:
           type: string
+        subtitle:
+          type: string
+          nullable: true
         duration_seconds:
           type: integer
           nullable: true
+        thumbnail_url:
+          type: string
+          nullable: true
+        free_preview:
+          type: boolean
         content_locale:
           "$ref": "#/components/schemas/LocaleCode"
+        completed:
+          type: boolean
     CourseModule:
       type: object
       required:
@@ -692,16 +802,24 @@ components:
       type: object
       required:
       - slug
-      - original_language
+      - localized_slugs
+      - category
       - requested_locale
       - content_locale
       - title
+      - lesson_count
       - available_languages
+      - progress
       - modules
       additionalProperties: false
       properties:
         slug:
           type: string
+        localized_slugs:
+          type: object
+          additionalProperties:
+            type: string
+          description: Public URL slug for each published translation.
         level:
           type: string
           nullable: true
@@ -709,8 +827,10 @@ components:
           - beginner
           - intermediate
           - advanced
-        original_language:
-          "$ref": "#/components/schemas/LocaleCode"
+        category:
+          oneOf:
+          - "$ref": "#/components/schemas/CourseCategory"
+          - type: "null"
         requested_locale:
           "$ref": "#/components/schemas/LocaleCode"
         content_locale:
@@ -720,8 +840,20 @@ components:
         description:
           type: string
           nullable: true
+        cover_image_url:
+          type: string
+          nullable: true
+        lesson_count:
+          type: integer
+        duration_seconds:
+          type: integer
+          nullable: true
         available_languages:
           "$ref": "#/components/schemas/AvailableLanguages"
+        progress:
+          oneOf:
+          - "$ref": "#/components/schemas/CourseProgress"
+          - type: 'null'
         modules:
           type: array
           items:
@@ -750,8 +882,11 @@ components:
       - slug
       - title
       - content_locale
+      - free_preview
+      - completed
       - course_slug
-      - original_language
+      - localized_slugs
+      - localized_lesson_slugs
       - requested_locale
       - available_languages
       additionalProperties: false
@@ -760,18 +895,36 @@ components:
           type: string
         title:
           type: string
+        subtitle:
+          type: string
+          nullable: true
         duration_seconds:
           type: integer
           nullable: true
+        thumbnail_url:
+          type: string
+          nullable: true
+        free_preview:
+          type: boolean
         content_locale:
           "$ref": "#/components/schemas/LocaleCode"
+        completed:
+          type: boolean
         course_slug:
           type: string
+        localized_slugs:
+          type: object
+          additionalProperties:
+            type: string
+          description: Public URL slug for each published course translation.
+        localized_lesson_slugs:
+          type: object
+          additionalProperties:
+            type: string
+          description: Public URL slug for each published lesson translation.
         description:
           type: string
           nullable: true
-        original_language:
-          "$ref": "#/components/schemas/LocaleCode"
         requested_locale:
           "$ref": "#/components/schemas/LocaleCode"
         available_languages:
@@ -803,3 +956,22 @@ components:
         expires_at:
           type: string
           format: date-time
+    LessonProgress:
+      type: object
+      required:
+      - position_seconds
+      - completed
+      additionalProperties: false
+      properties:
+        position_seconds:
+          type: integer
+        completed:
+          type: boolean
+    LessonProgressResult:
+      type: object
+      required:
+      - progress
+      additionalProperties: false
+      properties:
+        progress:
+          "$ref": "#/components/schemas/LessonProgress"

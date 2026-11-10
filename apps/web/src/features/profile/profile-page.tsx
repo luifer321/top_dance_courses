@@ -3,13 +3,19 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { enablePageLocale, type LocalePageProps } from "@/i18n/page-locale";
-import { localizedMetadata } from "@/lib/metadata";
+import { pageMetadata } from "@/lib/metadata";
 import { ProfileAccount } from "./profile-account";
 
 export async function generateMetadata({ params }: LocalePageProps) {
   const { locale } = await enablePageLocale(params);
   const t = await getTranslations({ locale, namespace: "profile" });
-  return { ...(await localizedMetadata(locale, "/profile", t("title"))), robots: { index: false } };
+  return pageMetadata({
+    locale,
+    title: `${t("title")} | Top Dance`,
+    description: t("subtitle"),
+    href: "/profile",
+    index: false,
+  });
 }
 
 export async function ProfilePage({ params }: LocalePageProps) {

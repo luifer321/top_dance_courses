@@ -2,7 +2,10 @@
   "metadata": {
     "title": "Top Dance",
     "titleTemplate": "%s · Top Dance",
-    "description": "Learn salsa, bachata, technique, musicality and choreography with Top Dance video courses."
+    "description": "Learn salsa, bachata, technique, musicality and choreography with Top Dance video courses.",
+    "homeTitle": "Online Dance Academy | Top Dance",
+    "coursesTitle": "Online Dance Courses | Top Dance",
+    "coursesDescription": "Learn salsa, bachata and more with Top Dance online courses."
   },
   "common": {
     "appName": "Top Dance",
@@ -16,13 +19,6 @@
       "change": "Change language",
       "es": "Español",
       "en": "English"
-    },
-    "contentLanguages": {
-      "available": "Available languages",
-      "original": "Original language",
-      "audio": "Audio",
-      "subtitles": "Subtitles",
-      "notAvailableInLocale": "This content is not available in English yet."
     }
   },
   "navigation": {
@@ -84,19 +80,34 @@
     "title": "Dashboard",
     "subtitle": "Your progress and courses in one place.",
     "continueLearning": "Continue learning",
-    "emptyProgress": "Once you start a course, your progress will appear here."
+    "emptyProgress": "Once you start a course, your progress will appear here.",
+    "signInHint": "Log in to save your progress."
   },
   "courses": {
     "title": "Courses",
     "subtitle": "Explore the Top Dance catalog.",
-    "emptyCatalog": "The catalog will be available very soon.",
+    "emptyCatalog": "No courses are available in English yet.",
     "detailTitle": "Course details",
     "detailPlaceholder": "This course's information will be loaded from the API.",
     "modules": "Modules",
     "lessons": "Lessons",
+    "curriculum": "Curriculum",
     "instructor": "Instructor",
     "notFound": "This course is not available.",
     "loadError": "Could not load this course.",
+    "lessonCount": "{count, plural, one {# lesson} other {# lessons}}",
+    "durationMinutes": "{count} min",
+    "coverAlt": "Cover image for {title}",
+    "thumbnailAlt": "Thumbnail for {title}",
+    "openLesson": "Open lesson {title}",
+    "freePreview": "Preview",
+    "start": "Start",
+    "continue": "Continue",
+    "notStarted": "Not started",
+    "inProgress": "In progress",
+    "completed": "Completed",
+    "watched": "Watched",
+    "progressLessons": "{completed} of {count} lessons",
     "level": {
       "beginner": "Beginner",
       "intermediate": "Intermediate",

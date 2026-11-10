@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1128"/>
+      <stop offset="55%" stop-color="#0f0a1a"/>
+      <stop offset="100%" stop-color="#0a0612"/>
+    </linearGradient>
+    <radialGradient id="spot" cx="50%" cy="18%" r="62%">
+      <stop offset="0%" stop-color="#c4a1f0" stop-opacity="0.42"/>
+      <stop offset="35%" stop-color="#8b5fcf" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#0a0612" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2d1b4e" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#0a0612" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="figure" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a87de8"/>
+      <stop offset="100%" stop-color="#2d1b4e"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <rect width="1600" height="900" fill="url(#spot)"/>
+  <polygon points="120,900 800,430 1480,900" fill="url(#floor)"/>
+  <g fill="url(#figure)" opacity="0.92">
+    <path d="M686 470c18-62 48-92 86-96 22 38 18 78-4 118l-18 44 42 132-48 8-28-96-22 42-54 78-44-18 62-96 28-116z"/>
+    <path d="M894 464c-8-58 18-102 62-114 36 28 48 74 28 122l-12 40 78 118-46 22-52-92-8 48-36 92-48-14 22-108 12-114z"/>
+  </g>
+  <ellipse cx="800" cy="820" rx="280" ry="28" fill="#c4a1f0" opacity="0.12"/>
+</svg>

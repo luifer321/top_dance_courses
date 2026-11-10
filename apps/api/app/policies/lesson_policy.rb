@@ -8,4 +8,8 @@ class LessonPolicy < ApplicationPolicy
   def playback?
     user.present? && record.visible_to_students?
   end
+
+  def progress?
+    playback?
+  end
 end

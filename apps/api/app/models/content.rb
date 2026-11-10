@@ -7,4 +7,10 @@ module Content
   LEVELS = %w[beginner intermediate advanced].freeze
   VIDEO_KINDS = %w[original dubbed].freeze
   VIDEO_STATUSES = %w[processing ready failed].freeze
+
+  ADMIN_LOCALE = "en"
+
+  def self.select_options(values)
+    values.map { |value| [ value.to_s.humanize, value ] }
+  end
 end

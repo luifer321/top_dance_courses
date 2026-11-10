@@ -11,7 +11,7 @@ export const generateStaticParams = () => [{ missing: ["404"] }];
 export async function generateMetadata({ params }: LocalePageProps) {
   const { locale } = await enablePageLocale(params);
   const t = await getTranslations({ locale, namespace: "errors" });
-  return { title: t("notFoundTitle"), robots: { index: false } };
+  return { title: { absolute: `${t("notFoundTitle")} | Top Dance` }, robots: { index: false, follow: true } };
 }
 
 export default async function MissingPage({ params }: LocalePageProps) {

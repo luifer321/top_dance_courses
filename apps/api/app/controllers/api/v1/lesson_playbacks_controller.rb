@@ -6,7 +6,7 @@ module Api
       before_action :authenticate_student!
 
       def show
-        lesson = Catalog::Lookup.lesson!(params[:course_slug] || params[:slug], params[:lesson_slug])
+        lesson = Catalog::Lookup.lesson!(params[:course_slug] || params[:slug], params[:lesson_slug], locale: request_locale)
         authorize lesson, :playback?
 
         asset = lesson.ready_video_asset

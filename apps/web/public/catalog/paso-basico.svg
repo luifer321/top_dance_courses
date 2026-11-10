@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2d1b4e"/>
+      <stop offset="100%" stop-color="#0a0612"/>
+    </linearGradient>
+    <radialGradient id="lamp" cx="42%" cy="20%" r="58%">
+      <stop offset="0%" stop-color="#c4a1f0" stop-opacity="0.5"/>
+      <stop offset="42%" stop-color="#6b3fa0" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0a0612" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c4a1f0"/>
+      <stop offset="100%" stop-color="#1a1128"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <rect width="1280" height="720" fill="url(#lamp)"/>
+  <path d="M0 720 L520 390 L1280 720 Z" fill="#15101f" opacity="0.9"/>
+  <path fill="url(#body)" d="M602 355c22-70 70-102 118-96 20 44 8 92-18 132l-10 36 64 148-54 14-36-108-18 50-48 92-50-20 48-108 4-140z"/>
+  <ellipse cx="640" cy="660" rx="210" ry="22" fill="#a87de8" opacity="0.16"/>
+</svg>

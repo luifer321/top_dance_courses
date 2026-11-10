@@ -6,6 +6,7 @@ import { Providers } from "@/components/providers";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { isLocale } from "@/i18n/routing";
+import { siteOrigin } from "@/lib/site-url";
 import { allLocaleParams } from "@/i18n/static-params";
 import { bodyFont, headingFont } from "../fonts";
 import "../globals.css";
@@ -28,10 +29,8 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {};
   const t = await getTranslations({ locale, namespace: "metadata" });
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-
   return {
-    metadataBase: siteUrl ? new URL(siteUrl) : undefined,
+    metadataBase: new URL(siteOrigin()),
     title: { default: t("title"), template: t("titleTemplate") },
     description: t("description"),
   };
@@ -55,7 +54,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
         <NextIntlClientProvider>
           <Providers>
             <SiteHeader />
-            <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">
+            <main id="main" className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
               {children}
             </main>
             <SiteFooter />

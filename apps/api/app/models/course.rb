@@ -3,38 +3,42 @@
 class Course < ApplicationRecord
   include Ransackable
   include HasLocaleTranslations
+  include LocaleSlugFields
+  include ImageAttachment
 
-  RANSACK_ATTRIBUTES = %w[id slug original_language level status published_at created_at updated_at].freeze
-  RANSACK_ASSOCIATIONS = %w[translations course_modules lessons].freeze
+  RANSACK_ATTRIBUTES = %w[id slug category_id level status published_at created_at updated_at].freeze
+  RANSACK_ASSOCIATIONS = %w[category translations course_modules lessons].freeze
 
-  has_many :translations, class_name: "CourseTranslation", dependent: :destroy, inverse_of: :course
+  belongs_to :category, optional: true, inverse_of: :courses
+  has_many :translations, ordered_translations_scope, class_name: "CourseTranslation", dependent: :destroy, inverse_of: :course
   has_many :course_modules, -> { order(:position, :id) }, dependent: :destroy, inverse_of: :course
   has_many :lessons, through: :course_modules
+  image_attachment :cover_image
 
   accepts_nested_attributes_for :translations, allow_destroy: true
   accepts_nested_attributes_for :course_modules, allow_destroy: true
 
   validates :slug, presence: true, uniqueness: true, format: { with: /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/ }
-  validates :original_language, inclusion: { in: Content::LOCALES }
   validates :status, inclusion: { in: Content::COURSE_STATUSES }
   validates :level, inclusion: { in: Content::LEVELS }, allow_blank: true
-  validate :original_language_must_be_published, if: :published?
+  validate :has_published_translation, if: :published?
 
   scope :published, -> { where(status: "published") }
   scope :visible, -> {
     published
       .joins(:translations)
       .where(course_translations: { status: "published" })
-      .where("course_translations.locale = courses.original_language")
       .distinct
   }
 
   scope :with_catalog_includes, -> {
     includes(
       :translations,
+      { category: :translations },
+      { cover_image_attachment: :blob },
       course_modules: {
         translations: [],
-        lessons: { translations: [], video_assets: :subtitle_tracks }
+        lessons: { translations: [], thumbnail_attachment: :blob, video_assets: :subtitle_tracks }
       }
     )
   }
@@ -45,12 +49,12 @@ class Course < ApplicationRecord
     status == "published"
   end
 
-  def original_translation
-    translation_for(original_language)
+  def display_cover_url
+    MediaUrl.for(cover_image) || cover_image_url.presence
   end
 
   def visible_to_students?
-    published? && original_translation&.published?
+    published? && translations.any? { |row| row.published? && row.title.present? }
   end
 
   def available_languages
@@ -75,10 +79,9 @@ class Course < ApplicationRecord
     end
   end
 
-  def original_language_must_be_published
-    translation = original_translation
-    return if translation&.published? && translation.title.present?
+  def has_published_translation
+    return if translations.any? { |row| row.published? && row.title.present? }
 
-    errors.add(:status, "requires a published #{original_language} translation with a title")
+    errors.add(:status, "requires a published translation with a title")
   end
 end

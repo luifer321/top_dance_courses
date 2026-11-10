@@ -10,7 +10,7 @@ module Api
       end
 
       def content_locale
-        @translation&.locale || @record.original_language
+        @translation&.locale || @requested_locale
       end
 
       def title
@@ -19,6 +19,10 @@ module Api
 
       def description
         @translation&.try(:description)
+      end
+
+      def subtitle
+        @translation&.try(:subtitle).presence
       end
     end
   end

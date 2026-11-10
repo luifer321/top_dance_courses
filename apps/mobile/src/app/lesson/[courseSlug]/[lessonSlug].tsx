@@ -14,6 +14,7 @@ type LessonDetail = {
   slug: string;
   course_slug: string;
   title: string;
+  subtitle?: string | null;
   description?: string | null;
   requested_locale: string;
   content_locale: string;
@@ -82,6 +83,7 @@ export default function LessonScreen() {
       {lesson && lesson !== "missing" ? (
         <>
           <Title>{lesson.title}</Title>
+          {lesson.subtitle ? <Body muted>{lesson.subtitle}</Body> : null}
           {lesson.description ? <Body muted>{lesson.description}</Body> : null}
           {lesson.requested_locale !== lesson.content_locale ? (
             <Body muted>{t("common.contentLanguages.notAvailableInLocale")}</Body>

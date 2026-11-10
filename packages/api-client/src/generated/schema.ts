@@ -213,6 +213,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/courses/{slug}/lessons/{lesson_slug}/progress": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+                lesson_slug: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Record how far a student has watched a lesson */
+        post: operations["recordLessonProgress"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/courses/{slug}/lessons/{lesson_slug}": {
         parameters: {
             query?: never;
@@ -322,22 +342,43 @@ export interface components {
             audio: components["schemas"]["LocaleCode"][];
             subtitles: components["schemas"]["LocaleCode"][];
         };
+        CourseProgress: {
+            completed_lessons: number;
+            lesson_count: number;
+            percent: number;
+        };
+        CourseCategory: {
+            slug: string;
+            name: string;
+        };
         CourseSummary: {
             slug: string;
+            /** @description Public URL slug for each published translation. */
+            localized_slugs: {
+                [key: string]: string;
+            };
             /** @enum {string|null} */
             level?: "beginner" | "intermediate" | "advanced" | null;
-            original_language: components["schemas"]["LocaleCode"];
+            category: components["schemas"]["CourseCategory"] | null;
             requested_locale: components["schemas"]["LocaleCode"];
             content_locale: components["schemas"]["LocaleCode"];
             title: string;
             description?: string | null;
+            cover_image_url?: string | null;
+            lesson_count: number;
+            duration_seconds?: number | null;
             available_languages: components["schemas"]["AvailableLanguages"];
+            progress: components["schemas"]["CourseProgress"] | null;
         };
         CourseLessonSummary: {
             slug: string;
             title: string;
+            subtitle?: string | null;
             duration_seconds?: number | null;
+            thumbnail_url?: string | null;
+            free_preview: boolean;
             content_locale: components["schemas"]["LocaleCode"];
+            completed: boolean;
         };
         CourseModule: {
             position: number;
@@ -347,14 +388,22 @@ export interface components {
         };
         Course: {
             slug: string;
+            /** @description Public URL slug for each published translation. */
+            localized_slugs: {
+                [key: string]: string;
+            };
             /** @enum {string|null} */
             level?: "beginner" | "intermediate" | "advanced" | null;
-            original_language: components["schemas"]["LocaleCode"];
+            category: components["schemas"]["CourseCategory"] | null;
             requested_locale: components["schemas"]["LocaleCode"];
             content_locale: components["schemas"]["LocaleCode"];
             title: string;
             description?: string | null;
+            cover_image_url?: string | null;
+            lesson_count: number;
+            duration_seconds?: number | null;
             available_languages: components["schemas"]["AvailableLanguages"];
+            progress: components["schemas"]["CourseProgress"] | null;
             modules: components["schemas"]["CourseModule"][];
         };
         CourseList: {
@@ -366,11 +415,22 @@ export interface components {
         Lesson: {
             slug: string;
             title: string;
+            subtitle?: string | null;
             duration_seconds?: number | null;
+            thumbnail_url?: string | null;
+            free_preview: boolean;
             content_locale: components["schemas"]["LocaleCode"];
+            completed: boolean;
             course_slug: string;
+            /** @description Public URL slug for each published course translation. */
+            localized_slugs: {
+                [key: string]: string;
+            };
+            /** @description Public URL slug for each published lesson translation. */
+            localized_lesson_slugs: {
+                [key: string]: string;
+            };
             description?: string | null;
-            original_language: components["schemas"]["LocaleCode"];
             requested_locale: components["schemas"]["LocaleCode"];
             available_languages: components["schemas"]["AvailableLanguages"];
             previous_slug?: string | null;
@@ -384,6 +444,13 @@ export interface components {
             embed_url: string;
             /** Format: date-time */
             expires_at: string;
+        };
+        LessonProgress: {
+            position_seconds: number;
+            completed: boolean;
+        };
+        LessonProgressResult: {
+            progress: components["schemas"]["LessonProgress"];
         };
     };
     responses: never;
@@ -799,6 +866,50 @@ export interface operations {
             };
             /** @description playback not configured */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    recordLessonProgress: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description cookie for the website session, token for mobile bearer tokens. */
+                "X-Auth-Transport"?: components["parameters"]["authTransport"];
+                Authorization?: string;
+            };
+            path: {
+                slug: string;
+                lesson_slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    position_seconds: number;
+                    duration_seconds?: number;
+                    ended?: boolean;
+                };
+            };
+        };
+        responses: {
+            /** @description progress saved */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LessonProgressResult"];
+                };
+            };
+            /** @description signed out */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };

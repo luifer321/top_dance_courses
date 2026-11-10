@@ -31,6 +31,9 @@ Rails.application.routes.draw do
       get "courses/:course_slug/lessons/:lesson_slug/playback",
           to: "lesson_playbacks#show",
           as: :course_lesson_playback
+      post "courses/:course_slug/lessons/:lesson_slug/progress",
+           to: "lesson_progresses#update",
+           as: :course_lesson_progress
 
       namespace :webhooks do
         post "bunny", to: "bunny#create"

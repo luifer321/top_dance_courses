@@ -5,14 +5,16 @@ module Api
     class CoursesController < BaseController
       def index
         authorize Course
-        courses = Catalog::Lookup.courses.map { |course| CourseSerializer.new(course, request_locale).summary }
-        render json: { courses: courses }
+        courses = Catalog::Lookup.courses(locale: request_locale)
+        progresses = LessonProgress.lookup(current_student, courses)
+        render json: { courses: courses.map { |course| CourseSerializer.new(course, request_locale, progresses: progresses).summary } }
       end
 
       def show
-        course = Catalog::Lookup.course!(params[:slug])
+        course = Catalog::Lookup.course!(params[:slug], locale: request_locale)
         authorize course
-        render json: { course: CourseSerializer.new(course, request_locale).detail }
+        progresses = LessonProgress.lookup(current_student, [ course ])
+        render json: { course: CourseSerializer.new(course, request_locale, progresses: progresses).detail }
       end
     end
   end

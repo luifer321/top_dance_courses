@@ -52,6 +52,21 @@ RSpec.describe "Admin dashboard", type: :request do
     expect(response.body).to include("paso-basico")
   end
 
+  it "renders the course edit form with nested copy" do
+    sign_in create(:admin_user)
+    course = create_published_catalog_course
+
+    get "/admin/courses/#{course.id}/edit"
+
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include("salsa-basics")
+    expect(response.body).to include("Salsa básica")
+    expect(response.body).to include("paso-basico")
+    expect(response.body).to include("Paso básico")
+    expect(response.body).to include("Module titles")
+    expect(response.body).to include("Lesson copy")
+  end
+
   it "redirects the root path to the dashboard" do
     get "/"
     expect(response).to redirect_to("/admin")

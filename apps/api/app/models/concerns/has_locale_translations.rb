@@ -24,6 +24,10 @@ module HasLocaleTranslations
   end
 
   class_methods do
+    def ordered_translations_scope
+      -> { in_order_of(:locale, Content::LOCALES) }
+    end
+
     def translations_table_name
       reflect_on_association(:translations).klass.table_name
     end
@@ -45,12 +49,16 @@ module HasLocaleTranslations
     translations.detect { |row| row.locale == locale.to_s }
   end
 
-  def published_translation_for(locale)
-    wanted = translations.detect { |row| row.locale == locale.to_s && row.published? }
-    return wanted if wanted
+  def published_in?(locale)
+    translation_for(locale)&.published? || false
+  end
 
-    original = respond_to?(:original_language) ? original_language : course&.original_language
-    translations.detect { |row| row.locale == original && row.published? }
+  def published_translation_for(locale)
+    translations.detect { |row| row.locale == locale.to_s && row.published? }
+  end
+
+  def any_title
+    Content::LOCALES.filter_map { |locale| translation_for(locale)&.try(:title).presence }.first
   end
 
   def missing_translation_summary

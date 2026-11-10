@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useLocaleAlternates } from "@/features/i18n/locale-alternates";
 import { getPathname, usePathname } from "@/i18n/navigation";
 import { locales, type Locale } from "@/i18n/routing";
 import { storeLocale } from "@/lib/locale-preference";
@@ -39,15 +40,20 @@ export function LanguageSwitcher() {
   const currentLocale = useLocale();
   const pathname = usePathname();
   const params = useParams();
+  const alternates = useLocaleAlternates();
 
   function switchTo(locale: Locale) {
     storeLocale(locale);
     if (locale === currentLocale) return;
-    const href = { pathname, params: resolveParams(pathname, params) } as Parameters<
+    const alternate = alternates?.[locale];
+    const href = (alternate ?? { pathname, params: resolveParams(pathname, params) }) as Parameters<
       typeof getPathname
     >[0]["href"];
     // Full navigation: the locale segment owns the root layout (<html lang>).
-    window.location.assign(getPathname({ locale, href }) + window.location.search);
+    // Course alternates already point at the translated slug, or the catalog
+    // when that language has no published translation.
+    const search = alternate ? "" : window.location.search;
+    window.location.assign(getPathname({ locale, href }) + search);
   }
 
   return (
